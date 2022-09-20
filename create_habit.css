@@ -25,7 +25,6 @@ body{
     justify-content: space-around;
     align-items: center;
     margin:30px;
-   
 }
 
 
@@ -37,7 +36,6 @@ nav{
     padding:30px;
     border-radius: 10px;
     border: 5px solid var(--border)
-
 }
 
 h1{
@@ -46,14 +44,16 @@ h1{
     padding:20px;
     padding-bottom: 10px;
     border-bottom: 10px double var(--border);
-    
-    
-   
 }
 
 
 h1:hover span {
     animation: textdance 0.5s alternate
+}
+
+p{
+  font-size: 20px;
+  font-weight: bold;
 }
 
 @keyframes textdance{
