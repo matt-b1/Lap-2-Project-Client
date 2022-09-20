@@ -10,8 +10,26 @@
      beforeEach(() => {
          document.documentElement.innerHTML = html.toString();  //beforeEach can be used if an action needs to be repeated before each test
      })
-     it('h1 shows "Accomplish" when website loads', () => {
-         const h1 = document.querySelector('h1');
-         expect(h1.innerHTML).toBe("Accomplish")
-       })
+
+       it('it has a nav bar with two anchor tags', () => {
+        const anchors = document.querySelectorAll('nav > a')
+        expect(anchors.length).toEqual(2)
+      })
+
+      it('it has a login anchor tag', () =>{
+        const login = document.querySelector('#login')
+        expect(login.innerHTML).toContain("Login")
+      })
+      it('it has a signup anchor tag', () =>{
+        const signUp = document.querySelector('#signup')
+        expect(signUp.innerHTML).toContain("Sign up")
+      })
+
+      it('it has a signup anchor tag', () =>{
+        const signUp = document.querySelector('#signup')
+        expect(signUp.innerHTML).toContain("Sign up")
+      })
+
+    
+       
     })

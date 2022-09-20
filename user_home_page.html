@@ -13,22 +13,21 @@
 </head>
 <body>
     <section id="top-section">
-        <h1 id ="Accomplish">
-            <span>A</span>
-            <span>c</span>
-            <span>c</span>
-            <span>o</span>
-            <span>m</span>
-            <span>p</span>
-            <span>l</span>
-            <span>i</span>
-            <span>s</span> 
-            <span>h</span>
+        <h1 id ="Achieved">
+                <span>A</span>
+                <span>c</span>
+                <span>h</span>
+                <span>i</span>
+                <span>e</span>
+                <span>v</span>
+                <span>e</span>
+                <span>d</span>
         </h1>
         <nav>
             <p id="date">The date today is: 20th Sept 2022</p>
         </nav>
     </section>
+
     <div class="content" id="content">
         <div id="contentHeader">
             <div id="welcome">
@@ -58,15 +57,103 @@
             <div class="taskListContent">
                 <h2>Tasks for today:</h2>
                 <ul id="user-tasks" class="tasks">
-                    <li>Water the plants</li>
-                    <li>Stay hydrated</li>
-                    <li>Do a walk</li>
+                    <li>
+                        <a href="#callender-div">
+                            Water the plants
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#callender-div">Stay hydrated</a> 
+                    </li>
+                    <li>
+                        <a href="#callender-div">Do a walk</a> 
+                    </li>
                 </ul>
             </div>
         </div>
         <div class="contentFooter">
-            <button id="addHabit"> <img> Add a habit</button>
+            <button id="addHabit"> Add a habit</button>
             <a href="home_page.html">Log out</a>
+        </div>
+    </div>
+    
+    <div class="overlay" id="callender-div">
+        <div class="wrapper">
+            <h2>September</h2>
+            <hr>
+            <a href="#" class="close">&times;</a>
+            <div class="content">
+                <div class="container">
+                    <table id="callender-table">
+                        <thead id="table-header">
+                            <th>Mon</th>
+                            <th>Tues</th>
+                            <th>Weds</th>
+                            <th>Thurs</th>
+                            <th>Fri</th>
+                            <th>Sat</th>
+                            <th>Sun</th>
+                        </thead>
+                        <tbody id="table-body">
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>1</td>
+                                <td class="completed">2</td>
+                            </tr>
+                            <tr></tr>
+                            <tr>
+                                <td>3</td>
+                                <td>4</td>
+                                <td>5</td>
+                                <td>6</td>
+                                <td>7</td>
+                                <td>8</td>
+                                <td>9</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>11</td>
+                                <td>12</td>
+                                <td>13</td>
+                                <td>14</td>
+                                <td>15</td>
+                                <td>16</td>
+                            </tr>
+                            <tr>
+                                <td>17</td>
+                                <td>18</td>
+                                <td>19</td>
+                                <td>20</td>
+                                <td>21</td>
+                                <td>22</td>
+                                <td>23</td>
+                            </tr>
+                            <tr>
+                                <td>24</td>
+                                <td>25</td>
+                                <td>26</td>
+                                <td>27</td>
+                                <td>28</td>
+                                <td>29</td>
+                                <td>30</td>
+                            </tr>
+                            <tr>
+                                <td>31</td>
+                                <td>1</td>
+                                <td>2</td>
+                                <td>3</td>
+                                <td>4</td>
+                                <td>5</td>
+                                <td>6</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </body>

@@ -31,7 +31,15 @@ nav{
     border: 5px solid var(--border)
 }
 
+a{
+    text-decoration: none;
+    color: var(--text);
+    padding:5px;
+}
 
+a:hover{
+    border: 5px solid var(--border)
+}
 p{
     font-size: 20px;
     font-weight: bold;
@@ -166,9 +174,13 @@ input[type="radio"] {
 #addHabit {
     margin: 20px;
     padding: 10px;
+    border: none;
     border-radius: 10px;
     font-size: 20px;
     font-weight: bold;
+    background-color: var(--text);
+    color: var(--background);
+    font-family: var(--font);
 }
 
 .contentFooter a {
@@ -226,10 +238,105 @@ h1 span:nth-child(1) {
     animation-delay: 0.8s;
   }
 
-  h1 span:nth-child(9) {
-    animation-delay: 0.9s;
-  }
 
-  h1 span:nth-child(10) {
-    animation-delay: 1.0s;
-  }
+
+  /* callender styling */
+
+#callender {
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+    border-radius: 50px;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.8);
+    transition: opacity 500ms;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.wrapper {
+    margin: 70px auto;
+    padding: 20px;
+    background-color: var(--background);
+    width: 70%;
+    position: relative;
+    border-radius: 10px;
+}
+
+.wrapper h2 {
+    font-weight: bold;
+    font-size: 26px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.wrapper hr {
+    margin-top: 15px;
+    opacity: 0.5;
+}
+
+.wrapper .close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 25px;
+}
+
+.close:hover {
+    color: red;
+}
+
+.overlay:target {
+    visibility: visible;
+    opacity: 1;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    padding: 20px;
+    
+}
+
+#callender-table{
+    border-spacing: 20px;
+    width: 100%;
+    
+}
+
+#table-header{
+    font-size: 20px;
+
+}
+
+#table-body{
+    font-size: 15px;
+}
+
+td{
+    text-align: center;
+    font-size: 20px;
+}
+
+.completed{
+
+    background-color:var(--border);
+    border-radius: 10px;
+}
+
+#search{
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid var(--text);
+    font-family: var(--font);
+    padding: 5px;
+}
+
