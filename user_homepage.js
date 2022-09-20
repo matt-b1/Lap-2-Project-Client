@@ -15,21 +15,22 @@ async function getAllHabits(){
 }
 
 
-function renderAllHabbits(){
-    let divs = [];
+function renderAllHabbits(data){
+    let lis = [];
     
 
     data.forEach(element => {
-        
+        const li = document.createElement('li')
+        li.setAttribute('id', element.id)
+        li.setAttribute('class', 'habbit-style')
+        li.textContent = element.description
+        lis.push(li)
     });
 
-    divs.forEach(div => {
-        cardssection.append(div)
+    lis.forEach(li => {
+        const ul = document.querySelector('#user-tasks')
+        ul.append(li)
     })
-    
-
-    let cardHolders = document.getElementsByClassName("card-div")
-    console.log(cardHolders.length)
 
     
     
