@@ -18,4 +18,218 @@ body{
     background-color: var(--background);
     color:var(--text);
     font-family: var(--font);
+    padding:20px;
 }
+
+nav{
+    display:flex;
+    justify-content: space-evenly;
+    width: 50%;
+    background-color:var(--nav) ;
+    padding:30px;
+    border-radius: 10px;
+    border: 5px solid var(--border)
+}
+
+
+p{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+h1{
+    display: flex;
+    font-size:60px;
+    padding-bottom: 10px;
+    border-bottom: 10px double var(--border);
+}
+
+h1:hover span {
+    animation: textdance 0.5s alternate
+}
+
+
+h3{
+    margin-top: 14px;
+    opacity: 0.8;
+    font-weight: normal;
+}
+
+.content{
+    margin-right: 10%;
+    margin-left: 10%;
+}
+
+#contentHeader{
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+#streakCounter{
+    font-size: 20px;
+    margin-top: 20px;
+    margin-right: 20%;
+}
+
+#welcome{
+    display: block;  
+    margin-top: 10px;
+   
+}
+
+#top-section{
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+    margin:30px;
+}
+
+.taskForm{
+    margin-top: 40px;
+    border: 5px solid var(--border);
+    border-radius: 5px;
+}
+
+.taskFormContent {
+    margin: 2%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.taskFormContent label{
+    font-size: 30px;
+}
+
+#confirm {
+    display: flex;
+    margin-top: 5px;
+}
+
+#yes {
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 50px;
+}
+
+#no {
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+input[type="radio"] {
+    margin-right: 6px;
+}
+
+.contentSearch {
+    font-size: 20px;
+    margin-top: 30px;
+    display: flex;
+    justify-content: right;
+}
+
+.contentSearch label {
+    margin-right: 10px;
+}
+
+.taskList {
+    margin-top: 30px;
+    border: 5px solid var(--border);
+    border-radius: 5px;
+}
+
+.taskListContent {
+    margin: 30px;
+}
+
+.taskList h2 {
+    text-align: center;
+}
+
+.tasks {
+    font-size: 24px;
+    overflow-y: hidden;
+}
+
+.tasks li {
+    margin: 30px;
+}
+
+.contentFooter {
+    justify-content: space-between;
+    display: flex;
+    
+}
+
+#addHabit {
+    margin: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.contentFooter a {
+    margin-top: 30px;
+    margin-right: 40px;
+    font-size: 20px;
+}
+
+@keyframes textdance{
+    0% {
+        
+        transform: translateY(0px)
+      }
+ 
+      50% {
+     
+        transform: translateY(-20px);
+      }
+ 
+      100% {
+     
+        transform: translateY(0px);
+    }
+}
+
+h1 span:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+
+  h1 span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  h1 span:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  h1 span:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+
+  h1 span:nth-child(5) {
+    animation-delay: 0.5s;
+  }
+
+  h1 span:nth-child(6) {
+    animation-delay: 0.6s;
+  }
+
+  h1 span:nth-child(7) {
+    animation-delay: 0.7s;
+  }
+
+  h1 span:nth-child(8) {
+    animation-delay: 0.8s;
+  }
+
+  h1 span:nth-child(9) {
+    animation-delay: 0.9s;
+  }
+
+  h1 span:nth-child(10) {
+    animation-delay: 1.0s;
+  }
