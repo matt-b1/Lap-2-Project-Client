@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
+    <script defer src="home_page.js"></script>
     <link rel="stylesheet" href="homepage_style.css">
     <title>Achieved</title>
 </head>
@@ -31,7 +32,7 @@
             </a>
         </nav>
     </section>
-    <p>Welcome to our amazing app! please keep track of your habits here.........</p>
+    <p>Welcome to our amazing app! please keep track of your habits here...</p>
     <section id="middle-section">
         <img src="" alt="Our logo?">
         <img src="" alt="Our logo?">
@@ -47,15 +48,15 @@
             <a href="#" class="close">&times;</a>
             <div class="content">
                 <div class="container">
-                    <form action="#">
+                    <form id="registerForm">
                         <label>Username:</label>
-                        <input type="text" placeholder="Username...">
+                        <input name="name" type="text" placeholder="Username...">
                         <label>Email:</label>
                         <input type="text" placeholder="Email...">
                         <label>Password:</label>
-                        <input type="password" placeholder="Password...">
+                        <input id="password" type="password" placeholder="Password...">
                         <label>Confirm password:</label>
-                        <input type="password" placeholder="Confirm password...">
+                        <input name="password" type="password" placeholder="Confirm password...">
                         <input type="submit" value="Submit">
                     </form>
                 </div>
@@ -70,7 +71,7 @@
             <a href="#" class="close">&times;</a>
             <div class="content">
                 <div class="container">
-                    <form action="#">
+                    <form id="loginForm">
                         <label>Username:</label>
                         <input type="text" placeholder="Username...">
                         <label>Password:</label>
