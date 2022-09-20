@@ -1,0 +1,121 @@
+*{
+    padding:0;
+    margin:0;
+    box-sizing: border-box;
+}
+
+:root{
+    --text:#6A517B;
+    --nav:#FAD4D8;
+    --background:#FAD4D8;
+    --border:#9DBF9B;
+    --navtext:#6A517B;
+    --font:'Courgette', cursive;
+    
+}
+
+body{
+    background-color: var(--background);
+    color:var(--text);
+    font-family: var(--font);
+}
+
+#top-section{
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+    margin:30px;
+   
+}
+
+
+nav{
+    display:flex;
+    justify-content: space-evenly;
+    width: 50%;
+    background-color:var(--nav) ;
+    padding:30px;
+    border-radius: 10px;
+    border: 5px solid var(--border)
+    
+
+
+}
+
+h1{
+    font-size:60px;
+    padding:20px;
+    padding-bottom: 10px;
+    border-bottom: 10px double var(--border);
+}
+
+a{
+    text-decoration: none;
+    color: var(--navtext);
+    font-size:30px;
+    font-weight: bold;
+}
+
+/* Make the images animation scrolling? */
+
+#login-form{
+    margin:50px;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border:5px solid var(--border);
+    border-radius: 10px;
+
+    width:50%;
+    font-family: var(--font);
+    
+}
+
+#main-section{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+input{
+    padding:20px;
+    margin: 20px;
+    margin-top: 0px;
+    width: 60%;
+    font-family: var(--font);
+    background-color:transparent;
+    border:none;
+    border-bottom: 5px solid var(--text);
+    font-size: 15px;
+
+}
+
+label{
+    padding:20px;
+    padding-bottom: 5px;
+    padding-left:0px ;
+    font-size: 30px;
+    width: 60%;
+    font-family: var(--font);
+}
+
+#login-button{
+    padding: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    background-color: var(--text);
+    color: var(--background);
+    border: none;
+    border-radius: 10px;
+    font-family: var(--font);
+}
+
+
+
+footer{
+    padding:30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

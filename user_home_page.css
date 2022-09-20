@@ -1,0 +1,21 @@
+*{
+    padding:0;
+    margin:0;
+    box-sizing: border-box;
+}
+
+:root{
+    --text:#6A517B;
+    --nav:#FAD4D8;
+    --background:#FAD4D8;
+    --border:#9DBF9B;    
+    --navtext:#6A517B;
+    --font:'Courgette', cursive;
+    
+}
+
+body{
+    background-color: var(--background);
+    color:var(--text);
+    font-family: var(--font);
+}
