@@ -1,6 +1,6 @@
 
 
-// when page load, fetch all the habbits
+// when page load, fetch all the habits
 
 addEventListener('load', getAllHabits())
 
@@ -8,21 +8,21 @@ async function getAllHabits(){
     try {
         await fetch(`http://localhost:3000/habits/user/1`)
         .then(res => res.json())
-        .then(renderAllHabbits)
+        .then(renderAllHabits)
     } catch (err) {
         console.warn(err);
     }
 }
 
 
-function renderAllHabbits(data){
+function renderAllHabits(data){
     let lis = [];
     
 
     data.forEach(element => {
         const li = document.createElement('li')
         li.setAttribute('id', element.id)
-        li.setAttribute('class', 'habbit-style')
+        li.setAttribute('class', 'habit-style')
         li.textContent = element.description
         lis.push(li)
     });
