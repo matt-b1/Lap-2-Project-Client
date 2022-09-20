@@ -14,4 +14,11 @@
          const h1 = document.querySelector('h1');
          expect(h1.innerHTML).toBe("Accomplish")
        })
+
+       it('h1 shows "Accomplish" when website loads', () => {
+        const h1 = document.querySelector('h1');
+        expect(h1.innerHTML).toBe("Accomplish")
+      })
+    
+       
     })
