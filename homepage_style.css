@@ -99,9 +99,6 @@ h1{
     padding:20px;
     padding-bottom: 10px;
     border-bottom: 10px double var(--border);
-    
-    
-   
 }
 
 
@@ -156,14 +153,6 @@ h1 span:nth-child(1) {
 
   h1 span:nth-child(8) {
     animation-delay: 0.8s;
-  }
-
-  h1 span:nth-child(9) {
-    animation-delay: 0.9s;
-  }
-
-  h1 span:nth-child(10) {
-    animation-delay: 1.0s;
   }
 
 
