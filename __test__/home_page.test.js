@@ -10,7 +10,7 @@
      beforeEach(() => {
          document.documentElement.innerHTML = html.toString();  //beforeEach can be used if an action needs to be repeated before each test
      })
-     it('h1 shows "Accomplish" when website loads', () => {
+     it('h1 shows "Achieved" when website loads', () => {
          const h1 = document.querySelector('h1');
          expect(h1.innerHTML).toBe("Accomplish")
        })

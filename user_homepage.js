@@ -24,6 +24,8 @@ function renderAllHabbits(data){
         const a = document.createElement('a')
         a.textContent = element.description
         a.setAttribute('href', '#callender-div')
+        a.setAttribute('class', 'habbit')
+        a.addEventListener('click', renderCallender())
         li.append(a)
         li.setAttribute('id', element.id)
         li.setAttribute('class', 'habbit-style')
@@ -42,17 +44,10 @@ function renderAllHabbits(data){
 
 // getting calander modals to pop up
 
-const habbits = document.querySelectorAll('.habbit-style')
 
-habbits.forEach(habbit => {
-    const habbitId = habbit.getAttribute('id')
-    habbit.addEventListener('click', renderCallender(habbitId))
-})
-
-
-async function renderCallender(id){
+async function renderCallender(){
     try {
-        await fetch(`http://localhost:3000/completed/1`)
+        await fetch(`http://localhost:3000/completion_dates/1`)
         .then(res => res.json())
         .then(updateCallender)
     } catch (err) {
@@ -61,13 +56,17 @@ async function renderCallender(id){
 }
 
 function updateCallender(data){
-    const dates = document.querySelectorAll('tr')
+    console.log(data)
+    let habbitdates = [];
+    habbitdates.push(data)
     
-    data.forEach(element => {
-        if(element.date[1] === '_' ){
-            var day = element.date.substring(0,1)
+    const dates = document.querySelectorAll('td')
+    
+    habbitdates.forEach(element => {
+        if(element.data[1] === '_' ){
+            var day = element.data.substring(0,1)
         }else {
-            var day = element.date.substring(0,2)
+            var day = element.data.substring(0,2)
         }
         dates.forEach(date => {
             if(date.textContent === day){
