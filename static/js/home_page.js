@@ -23,7 +23,7 @@ closeButton2.addEventListener("click", (e) => {
 async function checkUsernameExists(e) {
     try {
         let dupe;
-        await fetch(`http://localhost:3000/users`)
+        await fetch(`https://lap2-project-achieved.herokuapp.com/users`)
         .then(res => res.json())
         .then(data => {
             data.forEach(user => {
@@ -56,7 +56,7 @@ async function registerAccount(e) {
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
         }
-        await fetch("http://localhost:3000/users", options);
+        await fetch("https://lap2-project-achieved.herokuapp.com/users", options);
         resetRegistration();
         document.getElementById('close1').click();
     } else {
@@ -67,7 +67,7 @@ async function registerAccount(e) {
 
 async function accountLogin(e) {
     e.preventDefault();
-    await fetch("http://localhost:3000/users")
+    await fetch("https://lap2-project-achieved.herokuapp.com/users")
     .then(res => res.json())
     .then(data => {
         let user = data.filter(user => e.target.name.value === user.name);
