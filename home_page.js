@@ -1,9 +1,14 @@
 const registerForm = document.querySelector("#registerForm");
 const loginForm = document.querySelector("#loginForm");
+const closeButton1 = document.querySelector('#close1');
 
 registerForm.addEventListener("submit", (e) => {
     e.preventDefault()
     checkUsernameExists(e)
+})
+
+closeButton1.addEventListener("click", (e) => {
+    resetRegistration();
 })
 
 async function checkUsernameExists(e) {
@@ -19,8 +24,13 @@ async function checkUsernameExists(e) {
             })
         });
         if (dupe) {
-            Promise.reject(new Error('Username in use.'));
-        } else {
+            document.querySelector('#name').placeholder = 'Username already in use...'
+            resetRegistration();
+        } else if ((e.target.password.value).length < 6){
+            alert('Passwords need to be 6 characters long.');
+            resetRegistration();
+        }
+        else {
             registerAccount(e);
         }
     }
@@ -31,12 +41,20 @@ async function checkUsernameExists(e) {
 
 async function registerAccount(e) {
     e.preventDefault();
-    const options = {
-        method : "POST",
-        headers: { "Content-Type": "application/json"},
-        body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
+    if (e.target.password.value === e.target.confirmpassword.value) { 
+        const options = {
+            method : "POST",
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
+        }
+        await fetch("http://localhost:3000/users", options);
+        resetRegistration();
+        document.getElementById('close1').click();
+    } else {
+        alert('Passwords do not match');
     }
-    await fetch("http://localhost:3000/users", options);
+    document.querySelector('#registerForm').reset();
+
 }
 
 function resetRegistration() {
