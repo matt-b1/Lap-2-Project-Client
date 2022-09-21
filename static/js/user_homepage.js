@@ -1,3 +1,6 @@
+
+
+
 // when page load, fetch all the habits
 
 addEventListener('load', getAllHabits())
@@ -7,7 +10,8 @@ getDate();
 
 async function getAllHabits(){
     try {
-        await fetch(`https://lap2-project-achieved.herokuapp.com/habits/user/1`)
+        const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
+        await fetch(`https://lap2-project-achieved.herokuapp.com/habits/user/1`, options)
         .then(res => res.json())
         .then(renderAllHabits)
     } catch (err) {
@@ -44,13 +48,14 @@ function renderAllHabits(data){
     })
 }
 
-// Task posting
+// TASK POSTING
 const checklistButton = document.querySelector('#checklistButton')
 const hideChecklistButton = document.querySelector('#hideChecklist')
 checklistButton.addEventListener('click', renderCheckList)
 hideChecklistButton.addEventListener('click', removeChecklist)
-
+// render the checklist
 function renderCheckList() {
+
     let divs =[];
     const tasks = document.querySelectorAll('li>a');
     tasks.forEach(task => {
@@ -187,14 +192,12 @@ function postChecklist() {
         } catch (err) {
             console.warn(err);
         }
-        
-
-        
-    })
-    
-    
+         
+    })  
     
 }
+
+
 
 
 
