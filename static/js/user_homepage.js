@@ -12,8 +12,12 @@ async function getAllHabits(){
     try {
         const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
         await fetch(`https://lap2-project-achieved.herokuapp.com/habits/user/1`, options)
-        .then(res => res.json())
-        .then(renderAllHabits)
+        const data = await response.json();
+        if(data.err){
+            console.warn(data.err);
+            logout();
+        }
+        renderAllHabits(data)
     } catch (err) {
         console.warn(err);
     }
