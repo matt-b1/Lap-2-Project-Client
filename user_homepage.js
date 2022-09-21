@@ -17,8 +17,7 @@ async function getAllHabits(){
 
 function renderAllHabits(data){
     let lis = [];
-    
-
+    console.log(data);
     data.forEach(element => {
         const li = document.createElement('li')
         const a = document.createElement('a')
@@ -29,6 +28,7 @@ function renderAllHabits(data){
         li.append(a)
         li.setAttribute('id', element.id)
         li.setAttribute('class', 'habbit-style')
+        li.setAttribute('class', element.frequency) // element.frequency
         lis.push(li)
     });
 
@@ -92,18 +92,25 @@ function updateCallender(data){
 
 // Add the post habit function
 
-const habbitForm = document.querySelector('createHabbitForm');
-habbitForm.addEventListener('submit', addNewHabit(e) )
+const habbitForm = document.querySelector('#createHabbitForm');
+habbitForm.addEventListener('submit', addNewHabit )
 
 async function addNewHabit(e){
     e.preventDefault();
     try {
+        const entryData = {
+            description: e.target.habbitDescription.value,
+            frequency:e.target.frequency.value,
+            user_id: 1
+            
+        }
+        console.log(entryData)
         const options = {
             method : "POST",
             headers: { "Content-Type": "application/json"},
-            body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
+            body: JSON.stringify(entryData)
         }
-        fetch(`http://localhost:3000/habbits`, options)
+        fetch(`https://lap2-project-achieved.herokuapp.com/habits`, options)
     } catch (err) {
         console.warn(err);
     }
