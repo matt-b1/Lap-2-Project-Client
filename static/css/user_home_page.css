@@ -40,6 +40,7 @@ a{
 a:hover{
     border: 5px solid var(--border)
 }
+
 p{
     font-size: 20px;
     font-weight: bold;
