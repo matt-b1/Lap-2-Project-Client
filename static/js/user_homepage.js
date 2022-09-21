@@ -6,7 +6,7 @@ const habitButtton = document.querySelector('#addHabit')
 
 async function getAllHabits(){
     try {
-        await fetch(`http://localhost:3000/habits/user/1`)
+        await fetch(`https://lap2-project-achieved.herokuapp.com/habits/user/1`)
         .then(res => res.json())
         .then(renderAllHabits)
     } catch (err) {
@@ -41,7 +41,7 @@ habitButtton.addEventListener("click", renderCalendar);
 
 async function renderCalendar(){
     try {
-        await fetch(`http://localhost:3000/completion_dates/1`)
+        await fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/1`)
         .then(res => res.json())
         .then(updateCalender)
     } catch (err) {
