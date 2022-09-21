@@ -1,3 +1,5 @@
+//const { default: jwtDecode } = require("jwt-decode");
+
 const registerForm = document.querySelector("#registerForm");
 const loginForm = document.querySelector("#loginForm");
 const closeButton1 = document.querySelector('#close1');
@@ -9,7 +11,7 @@ registerForm.addEventListener("submit", (e) => {
 })
 
 loginForm.addEventListener("submit", (e) => {
-    accountLogin(e);
+    requestLogin(e);
 })
 
 closeButton1.addEventListener("click", (e) => {
@@ -62,19 +64,20 @@ async function registerAccount(e) {
     } else {
         alert('Passwords do not match');
     }
-    document.querySelector('#registerForm').reset();
+    resetRegistration();
 }
 
-async function accountLogin(e) {
+/*async function accountLogin(e) {
     e.preventDefault();
     const options = {
-        
+        method : "POST",
+        header: { "Content-Type": "application/json"},
+        body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
     }
     await fetch("https://lap2-project-achieved.herokuapp.com/users/login", options)
     .then(res => res.json())
     .then(data => {
-        console.log(data);
-        let user = data.filter(user => e.target.name.value === user.name);
+        /*let user = data.filter(user => e.target.name.value === user.name);
         if (!user.length) {
             alert('Login failed.');
             resetLogin();
@@ -90,8 +93,26 @@ async function accountLogin(e) {
                 alert('Login failed');
                 resetLogin();
             }
-        } 
+        }
     })
+}*/
+
+async function requestLogin(e){
+    e.preventDefault();
+    try {
+        const options = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
+        }
+        const r = await fetch(`https://lap2-project-achieved.herokuapp.com/users/login`, options)
+        const data = await r.json()
+        console.log(data);
+        if (!data.success) { throw new Error('Login not authorised'); }
+        login(data.token);
+    } catch (err) {
+        console.warn(err);
+    }
 }
 
 function resetLogin() {
@@ -102,7 +123,16 @@ function resetRegistration() {
     document.querySelector('#registerForm').reset();
 }
 
-function login(userDetails) {
-    localStorage.setItem('username', userDetails.name);
-    console.log(localStorage.getItem('username'));
+function login(token) {
+    const decodedToken = jwt_decode(token);
+    localStorage.setItem('token', token);
+    localStorage.setItem('username', decodedToken.username);
+    localStorage.setItem('user_id', decodedToken.user_id);
+    window.location.href = 'user_home_page.html';
+    resetLogin();
 }
+
+function logout(){
+    localStorage.clear();
+}
+

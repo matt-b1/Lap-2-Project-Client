@@ -8,6 +8,10 @@ const habitButtton = document.querySelector('#addHabit')
 getDate();
 renderUser();
 
+logOut.addEventListener('click', () => {
+    localStorage.clear();
+})
+
 async function getAllHabits(){
     try {
         await fetch(`https://lap2-project-achieved.herokuapp.com/habits/user/1`)
