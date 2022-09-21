@@ -19,12 +19,9 @@ async function getAllHabits(){
     try {
         const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
         await fetch(`https://lap2-project-achieved.herokuapp.com/habits/user/${localStorage.getItem('user_id')}`, options)
-        const data = await response.json();
-        if(data.err){
-            console.warn(data.err);
-            logout();
-        }
-        renderAllHabits(data)
+        .then(res => res.json())
+        .then(renderAllHabits)
+        
     } catch (err) {
         console.warn(err);
     }
@@ -44,19 +41,20 @@ function renderAllHabits(data){
     let lis = [];
     console.log(data);
     data.forEach(element => {
+        console.log('loading to do list...')
         const li = document.createElement('li')
         const a = document.createElement('a')
         a.textContent = element.description
         a.setAttribute('href', '#calendar-div')
         a.setAttribute('class', 'habbit')
-        a.addEventListener('click', renderCallender())
         a.setAttribute('id', element.id)
+        a.addEventListener('click', renderCalendar(a.getAttribute('id')))
         li.append(a)
         li.setAttribute('class', 'habbit-style')
         li.setAttribute('class', element.frequency) // element.frequency
         lis.push(li)
     });
-
+    console.log(lis)
     lis.forEach(li => {
         const ul = document.querySelector('#user-tasks')
         ul.append(li)
@@ -71,57 +69,48 @@ hideChecklistButton.addEventListener('click', removeChecklist)
 // render the checklist
 function renderCheckList() {
 
+    
     let divs =[];
     const tasks = document.querySelectorAll('li>a');
     tasks.forEach(task => {
-        const div = document.createElement('div')
-        div.setAttribute('class',`confirm ${task.getAttribute('id')}`)
-        div.setAttribute('id',`checkbox ${task.getAttribute('id')}`)
+        if(task.getAttribute('class') === 'habbit'){
+            const div = document.createElement('div')
+            div.setAttribute('class',`confirm ${task.getAttribute('id')}`)
+            div.setAttribute('id',`checkbox_${task.getAttribute('id')}`)
 
-        const p = document.createElement('p')
-        p.textContent = `Did you complete ${task.textContent} today?`
+            const p = document.createElement('p')
+            p.textContent = `Did you complete ${task.textContent} today?`
 
-        const yesLabel = document.createElement('label')
-        yesLabel.setAttribute('for', 'yesButton')
-        yesLabel.textContent = 'Yes'
+            const yesLabel = document.createElement('label')
+            yesLabel.setAttribute('for', 'yesButton')
+            yesLabel.textContent = 'Yes'
 
-        const yesInput = document.createElement('input')
-        yesInput.setAttribute('class','yesButton')
-        yesInput.setAttribute('id',`yesButton_${task.getAttribute('id')}`)
-        yesInput.setAttribute('type','radio')
-        yesInput.setAttribute('name',`confirm_${task.getAttribute('id')}`)
-        yesInput.setAttribute('value','yes')
-        
-        const noLabel = document.createElement('label')
-        noLabel.setAttribute('for', 'noButton')
-        noLabel.textContent = 'No'
+            const yesInput = document.createElement('input')
+            yesInput.setAttribute('class','yesButton')
+            yesInput.setAttribute('id',`yesButton_${task.getAttribute('id')}`)
+            yesInput.setAttribute('type','radio')
+            yesInput.setAttribute('name',`confirm_${task.getAttribute('id')}`)
+            yesInput.setAttribute('value','yes')
+            
+            const noLabel = document.createElement('label')
+            noLabel.setAttribute('for', 'noButton')
+            noLabel.textContent = 'No'
 
-        const noInput = document.createElement('input')
-        noInput.setAttribute('id',`noButton_${task.getAttribute('id')}`)
-        noInput.setAttribute('class','noButton')
-        noInput.setAttribute('type','radio')
-        noInput.setAttribute('name',`confirm_${task.getAttribute('id')}`)
-        noInput.setAttribute('value','no')
-        noInput.textContent = 'No'
+            const noInput = document.createElement('input')
+            noInput.setAttribute('id',`noButton_${task.getAttribute('id')}`)
+            noInput.setAttribute('class','noButton')
+            noInput.setAttribute('type','radio')
+            noInput.setAttribute('name',`confirm_${task.getAttribute('id')}`)
+            noInput.setAttribute('value','no')
+            noInput.textContent = 'No'
 
-        const labeldate = document.createElement('label')
-        labeldate.setAttribute('for',`day_${task.getAttribute('id')}`)
-        labeldate.textContent = 'Enter date of completion:'
-        const dateInput = document.createElement('input')
-        dateInput.setAttribute('class', 'date')
-        dateInput.setAttribute('type', 'date')
-        dateInput.setAttribute('id',`day_${task.getAttribute('id')}`)
-
-
-
-        div.append(p)  
-        div.append(yesLabel)  
-        div.append(yesInput)
-        div.append(noLabel)
-        div.append(noInput)
-        div.append(labeldate)
-        div.append(dateInput)
-        divs.push(div)
+            div.append(p)  
+            div.append(yesLabel)  
+            div.append(yesInput)
+            div.append(noLabel)
+            div.append(noInput)
+            divs.push(div)
+        }
 
     })
     const checklistDiv = document.querySelector('.taskForm')
@@ -162,39 +151,16 @@ function postChecklist() {
     checkedyesButtons = Array.from(yesButtons).filter(yesButton =>{
         return yesButton.checked === true
     })
-    let dates = []
+   
+    let date = new Date();
+    const month = date.toLocaleString('default', { month: 'numeric' });
+    const todaysDate = `${date.getDate()}_${month}_${date.getFullYear()}`
+    console.log(todaysDate);
     checkedyesButtons.forEach(yesButton => {
-        const id = yesButton.getAttribute('id').split('_')[1]
-        // console.log('this is id' +id)
-        
-        
-        const date = document.querySelector(`#day_${id}`)
-        dates.push(date)
-    })
-    console.log(dates)
-    
-    dates.forEach(date => {
-        const reversedDate = []
-        const newarray = date.value.split('-')
-        console.log(newarray[2][0])
-        if(newarray[2][0]===0){
-            reversedDate.push(`${newarray[2][1]}`)
-            reversedDate.push(`_${newarray[1]}`)
-            reversedDate.push(`_${newarray[0]}`)
-            var reversedDateString = reversedDate.join('')
-            console.log('this is date ' + reversedDateString)
-        } else{
-            reversedDate.push(`${newarray[2]}`)
-            reversedDate.push(`_${newarray[1]}`)
-            reversedDate.push(`_${newarray[0]}`)
-            var reversedDateString = reversedDate.join('')
-            console.log('this is date ' + reversedDateString)
-        }
-
         try {
             const entryData = {
-                habit_id: parseInt(date.getAttribute('id').split('_')[1]),
-                data: reversedDateString
+                habit_id: parseInt(yesButton.getAttribute('id').split('_')[1]),
+                data: todaysDate
             
             }
             console.log(entryData)
@@ -207,23 +173,24 @@ function postChecklist() {
         } catch (err) {
             console.warn(err);
         }
-         
-    })  
-    
+        const yesdiv = document.querySelector(`#checkbox_${yesButton.getAttribute('id').split('_')[1]}`)
+        yesdiv.remove()
+        const task = document.getElementById(`${yesButton.getAttribute('id').split('_')[1]}`)
+        task.setAttribute('class', 'habbit_completed')
+    })
+   
 }
-
-
-
+    
 
 
 
 // getting calender modals to pop up
 
-habitButtton.addEventListener("click", renderCalendar);
-
-async function renderCalendar(){
+async function renderCalendar(habbit_id){
     try {
-        await fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${localStorage.getItem('user_id')}`)
+        console.log(habbit_id)
+        const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
+        await fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${habbit_id}`,options)
         .then(res => res.json())
         .then(updateCalender)
     } catch (err) {
@@ -280,7 +247,7 @@ async function addNewHabit(e) {
         const entryData = {
             description: e.target.habbitDescription.value,
             frequency:e.target.frequency.value,
-            user_id: 1
+            user_id: localStorage.getItem('user_id')
             
         }
         console.log(entryData)
