@@ -2,8 +2,11 @@
 
 addEventListener('load', getAllHabits())
 
+
+const logOut = document.querySelector('#logout');
 const habitButtton = document.querySelector('#addHabit')
 getDate();
+renderUser();
 
 async function getAllHabits(){
     try {
@@ -19,6 +22,10 @@ function getDate() {
     let date = new Date();
     const month = date.toLocaleString('default', { month: 'long' });
     document.querySelector('#date').innerHTML = `${date.getDate()} ${month} ${date.getFullYear()}`;
+}
+
+function renderUser() {
+    document.querySelector('#user').textContent = `${localStorage.getItem('username')}`;
 }
 
 function renderAllHabits(data){
@@ -41,8 +48,6 @@ function renderAllHabits(data){
         ul.append(li)
     })
 }
-
-
 
 // getting calender modals to pop up
 
@@ -79,4 +84,8 @@ function updateCalender(data){
             }
         })
     })
+}
+
+function logout() {
+    localStorage.clear();
 }

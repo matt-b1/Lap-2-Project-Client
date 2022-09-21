@@ -67,9 +67,13 @@ async function registerAccount(e) {
 
 async function accountLogin(e) {
     e.preventDefault();
-    await fetch("https://lap2-project-achieved.herokuapp.com/users")
+    const options = {
+        
+    }
+    await fetch("https://lap2-project-achieved.herokuapp.com/users/login", options)
     .then(res => res.json())
     .then(data => {
+        console.log(data);
         let user = data.filter(user => e.target.name.value === user.name);
         if (!user.length) {
             alert('Login failed.');
@@ -78,6 +82,7 @@ async function accountLogin(e) {
         for (const userDetails of user) {
             console.log(userDetails);
             if (e.target.password.value === userDetails.password) {
+                login(userDetails);
                 window.location.href = 'user_home_page.html';
                 resetLogin();
             }
@@ -95,4 +100,9 @@ function resetLogin() {
 
 function resetRegistration() {
     document.querySelector('#registerForm').reset();
+}
+
+function login(userDetails) {
+    localStorage.setItem('username', userDetails.name);
+    console.log(localStorage.getItem('username'));
 }
