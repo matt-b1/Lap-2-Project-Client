@@ -340,3 +340,54 @@ td{
     padding: 5px;
 }
 
+
+#habbit-description-label{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#habbit-description{
+    padding: 20px;
+    padding-bottom: 5px;
+    margin: 10px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 5px solid var(--text);
+    font-family: var(--font);
+    width: 50%;
+}
+
+select{
+    background-color: transparent;
+    font-family: var(--font);
+    font-size: 30px;
+    border: none;
+    color: var(--text);
+    padding: 10px;
+    
+}
+
+#form-div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+#submit-div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+    padding: 10px;
+}
+
+#submit-input{
+    padding: 20px;
+    font-size: 20px;
+    font-family: var(--font);
+    background-color: var(--text);
+    color:var(--background);
+    border: none;
+    border-radius: 10px;
+}

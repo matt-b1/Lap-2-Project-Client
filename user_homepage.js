@@ -77,3 +77,35 @@ function updateCallender(data){
         })
     })
 }
+
+// add filter for complete, incomplete , none
+// function filterTasks() {
+//     const tasks = document.querySelectorAll(li > a)
+//     const completedTasks = tasks.filter(task => {
+//         task.getAttribute('class') = 'complete'
+//     })
+
+//     completedTasks.forEach(task => {
+
+//     })
+// }
+
+// Add the post habit function
+
+const habbitForm = document.querySelector('createHabbitForm');
+habbitForm.addEventListener('submit', addNewHabit(e) )
+
+async function addNewHabit(e){
+    e.preventDefault();
+    try {
+        const options = {
+            method : "POST",
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
+        }
+        fetch(`http://localhost:3000/habbits`, options)
+    } catch (err) {
+        console.warn(err);
+    }
+
+}

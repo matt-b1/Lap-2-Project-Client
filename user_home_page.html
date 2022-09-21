@@ -49,9 +49,16 @@
                 </div>
             </div>
         </div>
-        <div class="contentSearch">
-            <label for="search">Filter:</label>
-            <input id="search" type="text" size="50" name="search" placeholder="Search hobbies..."></input>
+        <div id = "filter">
+            <label for="filter">Filter:</label>
+            
+            <select id="filter">
+
+                <option value="Complete">Complete</option>
+                <option value="Incomplete">Incomplete</option>
+                <option value="none">None</option>
+               
+            </select>
         </div>
         <div class="taskList">
             <div class="taskListContent">
@@ -72,8 +79,39 @@
             </div>
         </div>
         <div class="contentFooter">
-            <button id="addHabit"> Add a habit</button>
+            <a href="#create-habbit-form">
+                <button id="addHabit"> Add a habit</button> 
+            </a>
             <a href="home_page.html">Log out</a>
+        </div>
+    </div>
+
+    <div class="overlay" id="create-habbit-form">
+        <div class="wrapper">
+            <h2>Create A New Habbit</h2>
+            <hr>
+            <a href="#" class="close">&times;</a>
+            <div class="content">
+                <div class="container">
+                    <form id="createHabbitForm">
+                        <div id="form-div">
+
+                            <label id="habbit-description-label" for="habbit-description">New habbit</label>
+                            <input id="habbit-description" name="name" type="text" placeholder="Description of habbit...">
+                            <select id="frequency">
+                                
+                                <option value="Daily">Daily</option>
+                                <option value="Weekly">Weekly</option>
+                                <option value="Monthly">Monthly</option>
+                                
+                            </select>
+                        </div>
+                        <div id="submit-div">
+                            <input id="submit-input" type="submit" value="Submit">
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
     
