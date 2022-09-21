@@ -63,8 +63,6 @@ function renderAllHabits(data){
     })
 }
 
-<<<<<<< HEAD
-=======
 // TASK POSTING
 const checklistButton = document.querySelector('#checklistButton')
 const hideChecklistButton = document.querySelector('#hideChecklist')
@@ -219,7 +217,6 @@ function postChecklist() {
 
 
 
->>>>>>> ae449da104569aedb4fbfa9223956cffff324738
 // getting calender modals to pop up
 
 habitButtton.addEventListener("click", renderCalendar);
@@ -257,10 +254,9 @@ function updateCalender(data){
     })
 }
 
-<<<<<<< HEAD
 function logout() {
     localStorage.clear();
-=======
+}
 // add filter for complete, incomplete , none
 // function filterTasks() {
 //     const tasks = document.querySelectorAll(li > a)
@@ -278,7 +274,7 @@ function logout() {
 const habbitForm = document.querySelector('#createHabbitForm');
 habbitForm.addEventListener('submit', addNewHabit )
 
-async function addNewHabit(e){
+async function addNewHabit(e) {
     e.preventDefault();
     try {
         const entryData = {
@@ -298,5 +294,4 @@ async function addNewHabit(e){
         console.warn(err);
     }
 
->>>>>>> ae449da104569aedb4fbfa9223956cffff324738
 }
