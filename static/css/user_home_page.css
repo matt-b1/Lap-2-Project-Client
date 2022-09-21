@@ -114,15 +114,25 @@ h3{
     font-size: 30px;
 }
 
+.checklistTask {
+    text-align: center;
+    margin: 20px;
+    
+}
+
+
+
 #confirm {
     display: flex;
     margin-top: 5px;
 }
 
+
 #yes {
     font-size: 20px;
+    margin
     font-weight: bold;
-    margin-left: 50px;
+
 }
 
 #no {
@@ -247,7 +257,7 @@ h1 span:nth-child(1) {
 
   /* callender styling */
 
-#callender {
+#calender {
     cursor: pointer;
     transition: all 0.3s ease-out;
     border-radius: 50px;
@@ -311,7 +321,7 @@ h1 span:nth-child(1) {
     
 }
 
-#callender-table{
+#calender-table{
     border-spacing: 20px;
     width: 100%;
     
@@ -332,7 +342,6 @@ td{
 }
 
 .completed{
-
     background-color:var(--border);
     border-radius: 10px;
 }
@@ -346,16 +355,16 @@ td{
 }
 
 
-#habbit-description-label{
-    font-size: 30px;
+#habit-description-label{
+    font-size: 22px;
     font-weight: bold;
 }
 
-#habbitDescription{
+#habitDescription{
     padding: 20px;
     padding-bottom: 5px;
-    margin: 10px;
-    background-color: transparent;
+    font-size: 20px;
+    background-color: white;
     border: none;
     border-bottom: 5px solid var(--text);
     font-family: var(--font);
@@ -370,6 +379,10 @@ select{
     color: var(--text);
     padding: 10px;
     
+}
+
+#frequency:hover {
+    border: solid 1px black;
 }
 
 #form-div{
