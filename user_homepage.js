@@ -1,8 +1,8 @@
-
-
 // when page load, fetch all the habits
 
 addEventListener('load', getAllHabits())
+const habitButtton = document.querySelector('#addHabit')
+
 
 async function getAllHabits(){
     try {
@@ -14,11 +14,8 @@ async function getAllHabits(){
     }
 }
 
-
 function renderAllHabits(data){
     let lis = [];
-    
-
     data.forEach(element => {
         const li = document.createElement('li')
         const a = document.createElement('a')
@@ -36,33 +33,30 @@ function renderAllHabits(data){
         const ul = document.querySelector('#user-tasks')
         ul.append(li)
     })
-
-    
-    
 }
 
+// getting calender modals to pop up
 
-// getting calander modals to pop up
+habitButtton.addEventListener("click", renderCalender);
 
-
-async function renderCallender(){
+async function renderCalender(){
     try {
         await fetch(`http://localhost:3000/completion_dates/1`)
         .then(res => res.json())
-        .then(updateCallender)
+        .then(updateCalender)
     } catch (err) {
         console.warn(err);
     }
 }
 
-function updateCallender(data){
+function updateCalender(data){
     console.log(data)
-    let habbitdates = [];
-    habbitdates.push(data)
+    let habitdates = [];
+    habitdates.push(data)
     
     const dates = document.querySelectorAll('td')
     
-    habbitdates.forEach(element => {
+    habitdates.forEach(element => {
         if(element.data[1] === '_' ){
             var day = element.data.substring(0,1)
         }else {
