@@ -16,6 +16,7 @@ loginForm.addEventListener("submit", (e) => {
 
 closeButton1.addEventListener("click", (e) => {
     resetRegistration();
+    document.querySelector('#name1').placeholder = 'Username...'
 })
 
 closeButton2.addEventListener("click", (e) => {
@@ -34,8 +35,9 @@ async function checkUsernameExists(e) {
                 }
             })
         });
+        console.log(dupe);
         if (dupe) {
-            document.querySelector('#name').placeholder = 'Username already in use...'
+            document.querySelector('#name1').placeholder = 'Username already in use...'
             resetRegistration();
         } else if ((e.target.password.value).length < 6){
             alert('Passwords need to be 6 characters long.');
@@ -59,6 +61,7 @@ async function registerAccount(e) {
             body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
         }
         await fetch("https://lap2-project-achieved.herokuapp.com/users", options);
+        alert(`Account ${e.target.name.value} successfully registered.`)
         resetRegistration();
         document.getElementById('close1').click();
     } else {
@@ -108,7 +111,11 @@ async function requestLogin(e){
         const r = await fetch(`https://lap2-project-achieved.herokuapp.com/users/login`, options)
         const data = await r.json()
         console.log(data);
-        if (!data.success) { throw new Error('Login not authorised'); }
+        if (!data.success) { 
+            resetLogin();
+            alert('Login failed. Please try again');
+            throw new Error('Login not authorised');
+        }
         login(data.token);
     } catch (err) {
         console.warn(err);
