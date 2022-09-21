@@ -397,6 +397,10 @@ select{
     max-height: 20px;
 }
 
+#delete:hover {
+    transform: scale(1.2);
+}
+
 #frequency:hover {
     border: solid 1px black;
 }

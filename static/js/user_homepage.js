@@ -1,5 +1,4 @@
 // when page load, fetch all the habits
-
 addEventListener('load', getAllHabits())
 
 
@@ -49,6 +48,7 @@ function renderAllHabits(data){
         a.addEventListener('click', renderCalendar(a.getAttribute('id')))
         img.setAttribute('src', '../images/delete.png')
         img.setAttribute('id', 'delete')
+        img.addEventListener('click', deleteHabit.bind(this, a.getAttribute('id'), element.description))
         li.append(a)
         li.append(img)
         li.setAttribute('class', 'habit-style')
@@ -75,7 +75,7 @@ function renderCheckList() {
     const tasks = document.querySelectorAll('li>a');
    
     tasks.forEach(task => {
-        if(task.getAttribute('class') === 'habbit'){
+        if(task.getAttribute('class') === 'habit'){
             const div = document.createElement('div')
             div.setAttribute('class',`confirm ${task.getAttribute('id')}`)
             div.setAttribute('id',`checkbox_${task.getAttribute('id')}`)
@@ -187,19 +187,19 @@ function postChecklist() {
 
 // getting calender modals to pop up
 
-async function renderCalendar(habbit_id){
+async function renderCalendar(habit_id){
     try {
-        console.log(habbit_id)
+        console.log(habit_id)
         const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
-        await fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${habbit_id}`,options)
+        await fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${habit_id}`,options)
         .then(res => res.json())
-        .then(updateCalender)
+        .then(updateCalendar)
     } catch (err) {
         console.warn(err);
     }
 }
 
-function updateCalender(data){
+function updateCalendar(data){
     console.log(data)
     let habitdates = [];
     habitdates.push(data)
@@ -261,5 +261,17 @@ async function addNewHabit(e) {
     } catch (err) {
         console.warn(err);
     }
+}
 
+async function deleteHabit(habit_id, description) {
+    const options = {
+        method : "DELETE",
+        headers: { "Content-Type": "application/json"},
+        body: JSON.stringify({"id": habit_id})
+    }
+    if (confirm(`Delete entry "${description}"?`)) {
+        fetch(`https://lap2-project-achieved.herokuapp.com/habits/${habit_id}`, options)
+    } else {
+        return;
+    }
 }
