@@ -80,6 +80,10 @@ h3{
     margin-right: 20%;
 }
 
+#dateText {
+    font-size: 22px;
+}
+
 #welcome{
     display: block;  
     margin-top: 10px;

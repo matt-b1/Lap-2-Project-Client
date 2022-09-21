@@ -1,8 +1,9 @@
-
-
 // when page load, fetch all the habits
 
 addEventListener('load', getAllHabits())
+
+const habitButtton = document.querySelector('#addHabit')
+getDate();
 
 async function getAllHabits(){
     try {
@@ -14,6 +15,11 @@ async function getAllHabits(){
     }
 }
 
+function getDate() {
+    let date = new Date();
+    const month = date.toLocaleString('default', { month: 'long' });
+    document.querySelector('#date').innerHTML = `${date.getDate()} ${month} ${date.getFullYear()}`;
+}
 
 function renderAllHabits(data){
     let lis = [];
@@ -22,7 +28,7 @@ function renderAllHabits(data){
         const li = document.createElement('li')
         const a = document.createElement('a')
         a.textContent = element.description
-        a.setAttribute('href', '#callender-div')
+        a.setAttribute('href', '#calendar-div')
         a.setAttribute('class', 'habbit')
         a.addEventListener('click', renderCallender())
         a.setAttribute('id', element.id)
@@ -36,9 +42,6 @@ function renderAllHabits(data){
         const ul = document.querySelector('#user-tasks')
         ul.append(li)
     })
-
-    
-    
 }
 
 // Task posting
@@ -195,27 +198,29 @@ function postChecklist() {
 
 
 
-// getting calander modals to pop up
 
+// getting calender modals to pop up
 
-async function renderCallender(){
+habitButtton.addEventListener("click", renderCalendar);
+
+async function renderCalendar(){
     try {
         await fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/1`)
         .then(res => res.json())
-        .then(updateCallender)
+        .then(updateCalender)
     } catch (err) {
         console.warn(err);
     }
 }
 
-function updateCallender(data){
+function updateCalender(data){
     console.log(data)
-    let habbitdates = [];
-    habbitdates.push(data)
+    let habitdates = [];
+    habitdates.push(data)
     
     const dates = document.querySelectorAll('td')
     
-    habbitdates.forEach(element => {
+    habitdates.forEach(element => {
         if(element.data[1] === '_' ){
             var day = element.data.substring(0,1)
         }else {

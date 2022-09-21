@@ -7,8 +7,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
-    <script defer src="home_page.js"></script>
-    <link rel="stylesheet" href="homepage_style.css">
+    <script defer src="../js/home_page.js"></script>
+    <link rel="stylesheet" href="../../static/css/homepage_style.css">
+    <link rel="shortcut icon" type="images/png" href="../images/favicon.ico">
+
     <title>Achieved</title>
 </head>
 <body>
@@ -45,37 +47,36 @@
         <div class="wrapper">
             <h2>Sign up</h2>
             <hr>
-            <a href="#" class="close">&times;</a>
+            <a href="#" id="close1" class="close">&times;</a>
             <div class="content">
                 <div class="container">
                     <form id="registerForm">
                         <label>Username:</label>
-                        <input name="name" type="text" placeholder="Username...">
-                        <label>Email:</label>
-                        <input type="text" placeholder="Email...">
+                        <input name="name" id="name1" type="text" placeholder="Username..." required>
+                        <!--<label>Email:</label>
+                        <input type="text" placeholder="Email...">-->
                         <label>Password:</label>
-                        <input id="password" type="password" placeholder="Password...">
+                        <input name="password" id="password1" type="password" placeholder="Password..." required>
                         <label>Confirm password:</label>
-                        <input name="password" type="password" placeholder="Confirm password...">
+                        <input name="confirmpassword" id="confirmpassword1" type="password" placeholder="Confirm password..." required>
                         <input type="submit" value="Submit">
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="overlay" id="loginform">
         <div class="wrapper">
             <h2>Login</h2>
             <hr>
-            <a href="#" class="close">&times;</a>
+            <a href="#" id="close2" class="close">&times;</a>
             <div class="content">
                 <div class="container">
                     <form id="loginForm">
                         <label>Username:</label>
-                        <input type="text" placeholder="Username...">
+                        <input name="name" type="text" id="name2" placeholder="Username..." required>
                         <label>Password:</label>
-                        <input type="password" placeholder="Password...">
+                        <input name="password" type="password" id="password2" placeholder="Password..." required>
                         <input type="submit" value="Login">
                     </form>
                 </div>
