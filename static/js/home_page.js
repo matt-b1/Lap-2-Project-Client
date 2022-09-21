@@ -71,6 +71,10 @@ async function accountLogin(e) {
     .then(res => res.json())
     .then(data => {
         let user = data.filter(user => e.target.name.value === user.name);
+        if (!user.length) {
+            alert('Login failed.');
+            resetLogin();
+        }
         for (const userDetails of user) {
             console.log(userDetails);
             if (e.target.password.value === userDetails.password) {
@@ -78,7 +82,7 @@ async function accountLogin(e) {
                 resetLogin();
             }
             else {
-                alert('Login failed.');
+                alert('Login failed');
                 resetLogin();
             }
         } 

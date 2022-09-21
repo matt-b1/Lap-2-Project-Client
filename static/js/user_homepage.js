@@ -20,12 +20,12 @@ function renderAllHabits(data){
         const li = document.createElement('li')
         const a = document.createElement('a')
         a.textContent = element.description
-        a.setAttribute('href', '#callender-div')
+        a.setAttribute('href', '#calendar-div')
         a.setAttribute('class', 'habbit')
-        a.addEventListener('click', renderCallender())
+        a.addEventListener('click', renderCalendar())
         li.append(a)
         li.setAttribute('id', element.id)
-        li.setAttribute('class', 'habbit-style')
+        li.setAttribute('class', 'habit-style')
         lis.push(li)
     });
 
@@ -37,9 +37,9 @@ function renderAllHabits(data){
 
 // getting calender modals to pop up
 
-habitButtton.addEventListener("click", renderCalender);
+habitButtton.addEventListener("click", renderCalendar);
 
-async function renderCalender(){
+async function renderCalendar(){
     try {
         await fetch(`http://localhost:3000/completion_dates/1`)
         .then(res => res.json())
