@@ -18,7 +18,7 @@ logOut.addEventListener('click', () => {
 async function getAllHabits(){
     try {
         const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
-        await fetch(`https://lap2-project-achieved.herokuapp.com/habits/user/1`, options)
+        await fetch(`https://lap2-project-achieved.herokuapp.com/habits/user/${localStorage.getItem('user_id')}`, options)
         const data = await response.json();
         if(data.err){
             console.warn(data.err);
@@ -226,7 +226,7 @@ habitButtton.addEventListener("click", renderCalendar);
 
 async function renderCalendar(){
     try {
-        await fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/1`)
+        await fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${localStorage.getItem('user_id')}`)
         .then(res => res.json())
         .then(updateCalender)
     } catch (err) {
