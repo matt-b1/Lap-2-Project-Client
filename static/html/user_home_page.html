@@ -28,7 +28,6 @@
             <p id="dateText">The date today is: <br> <span id="date"></span></p>
         </nav>
     </section>
-
     <div class="content" id="content">
         <div id="contentHeader">
             <div id="welcome">
@@ -44,9 +43,7 @@
         </div>
         <div id = "filter">
             <label for="filter">Filter:</label>
-            
             <select id="filter">
-
                 <option value="Complete">Complete</option>
                 <option value="Incomplete">Incomplete</option>
                 <option value="none">None</option>
@@ -61,27 +58,23 @@
             </div>
         </div>
         <div class="contentFooter">
-            <a href="#create-habit-form">
-                <button id="addHabit"> Add a habit</button> 
-            </a>
+            <button onclick="location.hash='#create-habit-form'" id="addHabit"> Add a habit</button> 
             <a href="home_page.html" id="logout">Log out</a>
         </div>
     </div>
 
     <div class="overlay" id="create-habit-form">
         <div class="wrapper">
-            <h2>Create A New Habbit</h2>
+            <h2>Create A New Habit</h2>
             <hr>
             <a href="#" class="close">&times;</a>
             <div class="content">
                 <div class="container">
                     <form id="createHabitForm">
                         <div id="form-div">
-
-                            <label id="habit-description-label" for="habbit-description">New habit</label>
+                            <label id="habit-description-label" for="habit-description">New habit</label>
                             <input id="habitDescription" name="name" type="text" placeholder="Description of habit...">
                             <select id="frequency" form="createHabitForm">
-                                
                                 <option value="Daily">Daily</option>
                                 <option value="Weekly">Weekly</option>
                                 <option value="Monthly">Monthly</option>
@@ -97,7 +90,7 @@
         </div>
     </div>
     
-    <div class="overlay" id="calendar-div">
+    <!--<div class="overlay" id="calendar-div">
         <div class="wrapper">
             <h2>September</h2>
             <hr>
@@ -175,6 +168,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
 </body>
 </html>

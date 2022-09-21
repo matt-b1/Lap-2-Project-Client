@@ -1,6 +1,3 @@
-
-
-
 // when page load, fetch all the habits
 
 addEventListener('load', getAllHabits())
@@ -44,13 +41,17 @@ function renderAllHabits(data){
         console.log('loading to do list...')
         const li = document.createElement('li')
         const a = document.createElement('a')
+        const img = document.createElement('img')
         a.textContent = element.description
         a.setAttribute('href', '#calendar-div')
-        a.setAttribute('class', 'habbit')
+        a.setAttribute('class', 'habit')
         a.setAttribute('id', element.id)
         a.addEventListener('click', renderCalendar(a.getAttribute('id')))
+        img.setAttribute('src', '../images/delete.png')
+        img.setAttribute('id', 'delete')
         li.append(a)
-        li.setAttribute('class', 'habbit-style')
+        li.append(img)
+        li.setAttribute('class', 'habit-style')
         li.setAttribute('class', element.frequency) // element.frequency
         lis.push(li)
     });
@@ -72,6 +73,7 @@ function renderCheckList() {
     
     let divs =[];
     const tasks = document.querySelectorAll('li>a');
+   
     tasks.forEach(task => {
         if(task.getAttribute('class') === 'habbit'){
             const div = document.createElement('div')
@@ -116,7 +118,6 @@ function renderCheckList() {
     const checklistDiv = document.querySelector('.taskForm')
     divs.forEach(div => {
         checklistDiv.append(div)
-
     })
 
     const submitChecklist = document.createElement('button')
