@@ -1,8 +1,9 @@
 // when page load, fetch all the habits
 
 addEventListener('load', getAllHabits())
-const habitButtton = document.querySelector('#addHabit')
 
+const habitButtton = document.querySelector('#addHabit')
+getDate();
 
 async function getAllHabits(){
     try {
@@ -12,6 +13,12 @@ async function getAllHabits(){
     } catch (err) {
         console.warn(err);
     }
+}
+
+function getDate() {
+    let date = new Date();
+    const month = date.toLocaleString('default', { month: 'long' });
+    document.querySelector('#date').innerHTML = `${date.getDate()} ${month} ${date.getFullYear()}`;
 }
 
 function renderAllHabits(data){
@@ -34,6 +41,8 @@ function renderAllHabits(data){
         ul.append(li)
     })
 }
+
+
 
 // getting calender modals to pop up
 
