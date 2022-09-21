@@ -6,7 +6,7 @@ addEventListener('load', getAllHabits())
 
 async function getAllHabits(){
     try {
-        await fetch(`http://localhost:3000/habits/user/1`)
+        await fetch(`https://lap2-project-achieved.herokuapp.com/habits/user/1`)
         .then(res => res.json())
         .then(renderAllHabits)
     } catch (err) {
@@ -25,8 +25,8 @@ function renderAllHabits(data){
         a.setAttribute('href', '#callender-div')
         a.setAttribute('class', 'habbit')
         a.addEventListener('click', renderCallender())
+        a.setAttribute('id', element.id)
         li.append(a)
-        li.setAttribute('id', element.id)
         li.setAttribute('class', 'habbit-style')
         li.setAttribute('class', element.frequency) // element.frequency
         lis.push(li)
@@ -41,13 +41,166 @@ function renderAllHabits(data){
     
 }
 
+// Task posting
+const checklistButton = document.querySelector('#checklistButton')
+const hideChecklistButton = document.querySelector('#hideChecklist')
+checklistButton.addEventListener('click', renderCheckList)
+hideChecklistButton.addEventListener('click', removeChecklist)
+
+function renderCheckList() {
+    let divs =[];
+    const tasks = document.querySelectorAll('li>a');
+    tasks.forEach(task => {
+        const div = document.createElement('div')
+        div.setAttribute('class',`confirm ${task.getAttribute('id')}`)
+        div.setAttribute('id',`checkbox ${task.getAttribute('id')}`)
+
+        const p = document.createElement('p')
+        p.textContent = `Did you complete ${task.textContent} today?`
+
+        const yesLabel = document.createElement('label')
+        yesLabel.setAttribute('for', 'yesButton')
+        yesLabel.textContent = 'Yes'
+
+        const yesInput = document.createElement('input')
+        yesInput.setAttribute('class','yesButton')
+        yesInput.setAttribute('id',`yesButton_${task.getAttribute('id')}`)
+        yesInput.setAttribute('type','radio')
+        yesInput.setAttribute('name',`confirm_${task.getAttribute('id')}`)
+        yesInput.setAttribute('value','yes')
+        
+        const noLabel = document.createElement('label')
+        noLabel.setAttribute('for', 'noButton')
+        noLabel.textContent = 'No'
+
+        const noInput = document.createElement('input')
+        noInput.setAttribute('id',`noButton_${task.getAttribute('id')}`)
+        noInput.setAttribute('class','noButton')
+        noInput.setAttribute('type','radio')
+        noInput.setAttribute('name',`confirm_${task.getAttribute('id')}`)
+        noInput.setAttribute('value','no')
+        noInput.textContent = 'No'
+
+        const labeldate = document.createElement('label')
+        labeldate.setAttribute('for',`day_${task.getAttribute('id')}`)
+        labeldate.textContent = 'Enter date of completion:'
+        const dateInput = document.createElement('input')
+        dateInput.setAttribute('class', 'date')
+        dateInput.setAttribute('type', 'date')
+        dateInput.setAttribute('id',`day_${task.getAttribute('id')}`)
+
+
+
+        div.append(p)  
+        div.append(yesLabel)  
+        div.append(yesInput)
+        div.append(noLabel)
+        div.append(noInput)
+        div.append(labeldate)
+        div.append(dateInput)
+        divs.push(div)
+
+    })
+    const checklistDiv = document.querySelector('.taskForm')
+    divs.forEach(div => {
+        checklistDiv.append(div)
+
+    })
+
+    const submitChecklist = document.createElement('button')
+    submitChecklist.setAttribute('id', 'checklistSubmit')
+    submitChecklist.textContent = 'Submit Checklist'
+    submitChecklist.addEventListener('click', postChecklist)
+    checklistDiv.append(submitChecklist)
+
+
+
+    checklistButton.setAttribute('hidden', 'hidden')
+    hideChecklistButton.removeAttribute('hidden')
+
+
+}
+
+function removeChecklist(){
+    const divs = document.querySelectorAll('.confirm')
+    divs.forEach(div => {
+        div.remove();
+    })
+
+    hideChecklistButton.setAttribute('hidden', 'hidden')
+    checklistButton.removeAttribute('hidden')
+    const submitChecklist = document.querySelector('#checklistSubmit')
+    submitChecklist.remove()
+}
+
+function postChecklist() {
+    const yesButtons = document.querySelectorAll('.yesButton')
+    
+    checkedyesButtons = Array.from(yesButtons).filter(yesButton =>{
+        return yesButton.checked === true
+    })
+    let dates = []
+    checkedyesButtons.forEach(yesButton => {
+        const id = yesButton.getAttribute('id').split('_')[1]
+        // console.log('this is id' +id)
+        
+        
+        const date = document.querySelector(`#day_${id}`)
+        dates.push(date)
+    })
+    console.log(dates)
+    
+    dates.forEach(date => {
+        const reversedDate = []
+        const newarray = date.value.split('-')
+        console.log(newarray[2][0])
+        if(newarray[2][0]===0){
+            reversedDate.push(`${newarray[2][1]}`)
+            reversedDate.push(`_${newarray[1]}`)
+            reversedDate.push(`_${newarray[0]}`)
+            var reversedDateString = reversedDate.join('')
+            console.log('this is date ' + reversedDateString)
+        } else{
+            reversedDate.push(`${newarray[2]}`)
+            reversedDate.push(`_${newarray[1]}`)
+            reversedDate.push(`_${newarray[0]}`)
+            var reversedDateString = reversedDate.join('')
+            console.log('this is date ' + reversedDateString)
+        }
+
+        try {
+            const entryData = {
+                habit_id: parseInt(date.getAttribute('id').split('_')[1]),
+                data: reversedDateString
+            
+            }
+            console.log(entryData)
+            const options = {
+                method : "POST",
+                headers: { "Content-Type": "application/json"},
+                body: JSON.stringify(entryData)
+            }
+            fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates`, options)
+        } catch (err) {
+            console.warn(err);
+        }
+        
+
+        
+    })
+    
+    
+    
+}
+
+
 
 // getting calander modals to pop up
 
 
 async function renderCallender(){
     try {
-        await fetch(`http://localhost:3000/completion_dates/1`)
+        await fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/1`)
         .then(res => res.json())
         .then(updateCallender)
     } catch (err) {
