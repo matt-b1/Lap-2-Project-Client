@@ -238,14 +238,14 @@ function logout() {
 
 // Add the post habit function
 
-const habbitForm = document.querySelector('#createHabbitForm');
-habbitForm.addEventListener('submit', addNewHabit )
+const habitForm = document.querySelector('#createHabitForm');
+habitForm.addEventListener('submit', addNewHabit )
 
 async function addNewHabit(e) {
     e.preventDefault();
     try {
         const entryData = {
-            description: e.target.habbitDescription.value,
+            description: e.target.habitDescription.value,
             frequency:e.target.frequency.value,
             user_id: localStorage.getItem('user_id')
             
