@@ -37,22 +37,21 @@
             </div>
             <p id="streakCounter">Current Streak: 0 days</p> 
         </div>
+        <button id="checklistButton">Get Checklist</button>
+        <button id ="hideChecklist" hidden ="hidden">Close Checklist</button>
         <div class="taskForm">
-            <div class="taskFormContent">
-                <label for="taskComplete">Did you fulfill x today? </label>
-                <div id="confirm">
-                    <div id="yes">
-                        <input type="radio" name="confirm" value="yes" checked>Yes</input>
-                    </div>
-                    <div id="no">
-                        <input type="radio" name="confirm" value="no">No</input>
-                    </div>
-                </div>
-            </div>
+            
         </div>
-        <div class="contentSearch">
-            <label for="search">Filter:</label>
-            <input id="search" type="text" size="50" name="search" placeholder="Search hobbies..."></input>
+        <div id = "filter">
+            <label for="filter">Filter:</label>
+            
+            <select id="filter">
+
+                <option value="Complete">Complete</option>
+                <option value="Incomplete">Incomplete</option>
+                <option value="none">None</option>
+               
+            </select>
         </div>
         <div class="taskList">
             <div class="taskListContent">
@@ -73,8 +72,44 @@
             </div>
         </div>
         <div class="contentFooter">
+<<<<<<< HEAD
             <button id="addHabit"> Add a habit</button>
             <a id="logout" href="home_page.html">Log out</a>
+=======
+            <a href="#create-habbit-form">
+                <button id="addHabit"> Add a habit</button> 
+            </a>
+            <a href="home_page.html">Log out</a>
+>>>>>>> ae449da104569aedb4fbfa9223956cffff324738
+        </div>
+    </div>
+
+    <div class="overlay" id="create-habbit-form">
+        <div class="wrapper">
+            <h2>Create A New Habbit</h2>
+            <hr>
+            <a href="#" class="close">&times;</a>
+            <div class="content">
+                <div class="container">
+                    <form id="createHabbitForm">
+                        <div id="form-div">
+
+                            <label id="habbit-description-label" for="habbit-description">New habbit</label>
+                            <input id="habbitDescription" name="name" type="text" placeholder="Description of habbit...">
+                            <select id="frequency" form="createHabbitForm">
+                                
+                                <option value="Daily">Daily</option>
+                                <option value="Weekly">Weekly</option>
+                                <option value="Monthly">Monthly</option>
+                                
+                            </select>
+                        </div>
+                        <div id="submit-div">
+                            <input id="submit-input" type="submit" value="Submit">
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
     
