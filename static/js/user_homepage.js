@@ -3,7 +3,8 @@ addEventListener('load', getAllHabits())
 
 
 const logOut = document.querySelector('#logout');
-const habitButtton = document.querySelector('#addHabit')
+const habitButtton = document.querySelector('#addHabit');
+filterHabit;
 getDate();
 renderUser();
 
@@ -72,36 +73,54 @@ hideChecklistButton.addEventListener('click', removeChecklist)
 function renderCheckList() {
     let divs =[];
     const tasks = document.querySelectorAll('li>a');
-   
+
     tasks.forEach(task => {
-        if(task.getAttribute('class') === 'habit'){
-            const div = document.createElement('div')
-            div.setAttribute('class',`confirm ${task.getAttribute('id')}`)
-            div.setAttribute('id',`checkbox_${task.getAttribute('id')}`)
-
-            const p = document.createElement('p')
-            p.textContent = `Did you complete ${task.textContent} today?`
-
-
-            const yesInput = document.createElement('input')
-            yesInput.setAttribute('class','yesButton')
-            yesInput.setAttribute('id',`yesButton_${task.getAttribute('id')}`)
-            yesInput.setAttribute('type','checkbox')
-            yesInput.setAttribute('name',`confirm_${task.getAttribute('id')}`)
-            yesInput.setAttribute('value','yes')
-            
-           
-
-            div.append(p)  
-            div.append(yesInput)
-            divs.push(div)
+        const id = task.getAttribute('id')
+        const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
+        fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`,options)
+        .then(res => res.json())
+        .then(renderHabitChecklist)
+        
+        function renderHabitChecklist(data){
+            let date = new Date();
+            const month = date.toLocaleString('default', { month: '2-digit' });
+            const todaysDate = `${date.getDate()}_${month}_22`
+            let count = 0;
+            data.forEach( date => {
+                try {
+                    console.log(date.date)
+                    if(date.date === todaysDate ){
+                        count = 1;
+                }
+            } catch {
+                
+            }
+            })
+            if(data.err === 'Completion dates not found for this habit' || count === 0){
+                
+                if(task.getAttribute('class') === 'habit'){
+                    const div = document.createElement('div')
+                    div.setAttribute('class',`confirm ${task.getAttribute('id')}`)
+                    div.setAttribute('id',`checkbox_${task.getAttribute('id')}`)
+                    const p = document.createElement('p')
+                    p.textContent = `Did you complete ${task.textContent} today?`
+                    const yesInput = document.createElement('input')
+                    yesInput.setAttribute('class','yesButton')
+                    yesInput.setAttribute('id',`yesButton_${task.getAttribute('id')}`)
+                    yesInput.setAttribute('type','checkbox')
+                    yesInput.setAttribute('name',`confirm_${task.getAttribute('id')}`)
+                    yesInput.setAttribute('value','yes')
+                    div.append(p)  
+                    div.append(yesInput)
+                    // 
+                    const checklistDiv = document.querySelector('.taskForm')
+                    checklistDiv.prepend(div)
+                }   
+            }
         }
+    })
 
-    })
     const checklistDiv = document.querySelector('.taskForm')
-    divs.forEach(div => {
-        checklistDiv.append(div)
-    })
 
     const submitChecklist = document.createElement('button')
     submitChecklist.setAttribute('id', 'checklistSubmit')
@@ -113,9 +132,10 @@ function renderCheckList() {
 
     checklistButton.setAttribute('hidden', 'hidden')
     hideChecklistButton.removeAttribute('hidden')
-
-
 }
+
+
+
 
 function removeChecklist(){
     const divs = document.querySelectorAll('.confirm')
@@ -233,6 +253,13 @@ function logout() {
 // }
 
 // Add the post habit function
+
+function filterHabit() {
+    const completedTasks = tasks.filter(task => {
+            task.getAttribute('class') = 'habbit_completed'
+    })
+    console.log(completedTasks);
+}
 
 const habitForm = document.querySelector('#createHabitForm');
 habitForm.addEventListener('submit', (e) => {
