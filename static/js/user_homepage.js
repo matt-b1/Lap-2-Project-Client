@@ -58,6 +58,7 @@ function renderAllHabits(data){
             img.setAttribute('src', '../images/delete.png')
             img.setAttribute('id', 'delete')
             img.addEventListener('click', deleteHabit.bind(this, a.getAttribute('id'), element.description))
+            
             li.append(a)
             li.append(img)
             lis.push(li)
@@ -233,6 +234,9 @@ async function renderCalendar(e){
     } catch (err) {
         console.warn(err);
     }
+    console.log(e.srcElement.textContent)
+    const calenderHeader = document.querySelector('#calender-header')
+    calenderHeader.textContent = `Habit: ${e.srcElement.textContent}`
 }
 
 function updateCalendar(data){
@@ -295,6 +299,7 @@ function updateCalendar(data){
     }
 }
 
+
 function logout() {
     localStorage.clear();
 }
@@ -304,10 +309,10 @@ function logout() {
 //     const completedTasks = tasks.filter(task => {
 //         task.getAttribute('class') = 'habbit_completed'
 //     })
-// 
+
 //     completedTasks.forEach(task => {
 //          const ul = document.querySelector('#user-tasks')
-//          
+         
 //     })
 // }
 

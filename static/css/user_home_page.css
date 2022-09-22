@@ -293,6 +293,11 @@ h1 span:nth-child(1) {
     font-size: 26px;
     text-align: center;
     text-transform: uppercase;
+    margin: 10px;
+}
+
+#calender-header{
+    text-transform: none;
 }
 
 .wrapper hr {
@@ -474,4 +479,39 @@ select{
 
 .habit_Completed{
     color: var(--border);
+}
+
+
+li{
+    display:grid;
+    grid-template-columns: repeat(2,1fr);
+    place-items: center;
+
+}
+
+li > a{
+    text-align: center;
+}
+
+li > img:before{
+  content: attr(data-hover);
+  visibility: hidden;
+  opacity: 0;
+  width: 140px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px 0;
+  transition: opacity 1s ease-in-out;
+
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 110%;
+}
+
+li > img:hover:before{
+    opacity: 1;
+  visibility: visible;
 }
