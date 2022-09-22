@@ -35,33 +35,72 @@ function renderUser() {
 }
 
 function renderAllHabits(data){
-    let lis = [];
-    console.log(data);
-    data.forEach(element => {
-        console.log('loading to do list...')
-        const li = document.createElement('li')
-        const a = document.createElement('a')
-        const img = document.createElement('img')
-        a.textContent = element.description
-        a.setAttribute('href', '#calender-div')
-        a.setAttribute('class', 'habit')
-        a.setAttribute('id', element.id)
-        a.addEventListener('click', renderCalendar)
-        li.append(a)
-        li.setAttribute('id', `li_${element.id}`)
-        li.setAttribute('class', element.frequency) // element.frequency
-        img.setAttribute('src', '../images/delete.png')
-        img.setAttribute('id', 'delete')
-        img.addEventListener('click', deleteHabit.bind(this, a.getAttribute('id'), element.description))
-        li.append(a)
-        li.append(img)
-        lis.push(li)
-    });
-   
-    lis.forEach(li => {
-        const ul = document.querySelector('#user-tasks')
-        ul.append(li)
+    
+
+
+    
+        let lis = [];
+        console.log(data);
+        data.forEach(element => {
+            console.log('loading to do list...')
+            const li = document.createElement('li')
+            const a = document.createElement('a')
+            const img = document.createElement('img')
+            a.textContent = element.description
+            a.setAttribute('href', '#calender-div')
+            
+            a.setAttribute('class', 'habit')
+            a.setAttribute('id', element.id)
+            a.addEventListener('click', renderCalendar)
+            li.append(a)
+            li.setAttribute('id', `li_${element.id}`)
+            li.setAttribute('class', element.frequency) // element.frequency
+            img.setAttribute('src', '../images/delete.png')
+            img.setAttribute('id', 'delete')
+            img.addEventListener('click', deleteHabit.bind(this, a.getAttribute('id'), element.description))
+            li.append(a)
+            li.append(img)
+            lis.push(li)
+        });
+    
+        lis.forEach(li => {
+            const ul = document.querySelector('#user-tasks')
+            ul.append(li)
+        })
+
+        const tasks = document.querySelectorAll('li>a');
+
+    tasks.forEach(task => {
+        const id = task.getAttribute('id')
+        const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
+        fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`,options)
+        .then(res => res.json())
+        .then(crossCheckDates)
+        
+        function crossCheckDates(dates){
+            
+            let date = new Date();
+            const month = date.toLocaleString('default', { month: '2-digit' });
+            const todaysDate = `${date.getDate()}_${month}_22`
+            
+            if(dates.err === 'Completion dates not found for this habit'){
+                console.log('no date')
+            } else{
+                
+                console.log(dates)
+                dates.forEach( date => {
+                    console.log(date.date)
+                    if(date.date === todaysDate ){
+                        task.setAttribute('class', 'habit_Completed')
+                    }
+                })
+                
+            }
+            
+        }
     })
+
+    
 }
 
 // TASK POSTING
@@ -86,16 +125,17 @@ function renderCheckList() {
             const month = date.toLocaleString('default', { month: '2-digit' });
             const todaysDate = `${date.getDate()}_${month}_22`
             let count = 0;
-            data.forEach( date => {
-                try {
+
+            if(data.err === 'Completion dates not found for this habit'){
+                console.log('no date')
+            } else{
+                data.forEach( date => {
                     console.log(date.date)
                     if(date.date === todaysDate ){
                         count = 1;
-                }
-            } catch {
-                
+                    }
+                })
             }
-            })
             if(data.err === 'Completion dates not found for this habit' || count === 0){
                 
                 if(task.getAttribute('class') === 'habit'){
@@ -115,7 +155,14 @@ function renderCheckList() {
                     // 
                     const checklistDiv = document.querySelector('.taskForm')
                     checklistDiv.prepend(div)
-                }   
+
+
+                } else {
+                    console.log('completing tasks....')
+                    task.setAttribute('class', 'habbit_completed')
+                }
+            
+
             }
         }
     })
@@ -174,6 +221,7 @@ function postChecklist() {
                 body: JSON.stringify(entryData)
             }
             fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates`, options)
+            .then(reloadPage)
         } catch (err) {
             console.warn(err);
         }
