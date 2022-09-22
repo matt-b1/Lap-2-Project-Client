@@ -1,8 +1,4 @@
-
-
-
 // when page load, fetch all the habits
-
 addEventListener('load', getAllHabits())
 
 
@@ -44,6 +40,7 @@ function renderAllHabits(data){
         console.log('loading to do list...')
         const li = document.createElement('li')
         const a = document.createElement('a')
+        const img = document.createElement('img')
         a.textContent = element.description
         a.setAttribute('href', '#calender-div')
         a.setAttribute('class', 'habbit')
@@ -52,6 +49,11 @@ function renderAllHabits(data){
         li.append(a)
         li.setAttribute('id', `li_${element.id}`)
         li.setAttribute('class', 'habbit-style')
+        img.setAttribute('src', '../images/delete.png')
+        img.setAttribute('id', 'delete')
+        img.addEventListener('click', deleteHabit.bind(this, a.getAttribute('id'), element.description))
+        li.append(a)
+        li.append(img)
         li.setAttribute('class', element.frequency) // element.frequency
         lis.push(li)
     });
@@ -73,8 +75,9 @@ function renderCheckList() {
     
     let divs =[];
     const tasks = document.querySelectorAll('li>a');
+   
     tasks.forEach(task => {
-        if(task.getAttribute('class') === 'habbit'){
+        if(task.getAttribute('class') === 'habit'){
             const div = document.createElement('div')
             div.setAttribute('class',`confirm ${task.getAttribute('id')}`)
             div.setAttribute('id',`checkbox_${task.getAttribute('id')}`)
@@ -117,7 +120,6 @@ function renderCheckList() {
     const checklistDiv = document.querySelector('.taskForm')
     divs.forEach(div => {
         checklistDiv.append(div)
-
     })
 
     const submitChecklist = document.createElement('button')
@@ -187,6 +189,7 @@ function postChecklist() {
 
 // getting calender modals to pop up
 
+
 async function renderCalendar(e){
     try {
         const id = e.srcElement.getAttribute('id')
@@ -194,13 +197,13 @@ async function renderCalendar(e){
         const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
         await fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`,options)
         .then(res => res.json())
-        .then(updateCalender)
+        .then(updateCalendar)
     } catch (err) {
         console.warn(err);
     }
 }
 
-function updateCalender(data){
+function updateCalendar(data){
     console.log(data)
 
     if(data.err === 'Completion dates not found for this habit'){
@@ -280,14 +283,44 @@ function logout() {
 
 // Add the post habit function
 
-const habbitForm = document.querySelector('#createHabbitForm');
-habbitForm.addEventListener('submit', addNewHabit )
+const habitForm = document.querySelector('#createHabitForm');
+habitForm.addEventListener('submit', (e) => {
+    addNewHabit(e);
+    renderNewHabit(e)
+})
+
+function renderNewHabit(e){
+    const entryData = {
+        description: e.target.habitDescription.value,
+        frequency:e.target.frequency.value,
+        user_id: localStorage.getItem('user_id')
+    }
+    const li = document.createElement('li')
+    const a = document.createElement('a')
+    const img = document.createElement('img')
+    a.textContent = entryData.description
+    a.setAttribute('href', '#calendar-div')
+    a.setAttribute('class', 'habit')
+    a.setAttribute('id', entryData.id)
+    a.addEventListener('click', renderCalendar(a.getAttribute('id')))
+    img.setAttribute('src', '../images/delete.png')
+    img.setAttribute('id', 'delete')
+    img.addEventListener('click', deleteHabit.bind(this, a.getAttribute('id'), entryData.description))
+    li.append(a)
+    li.append(img)
+    li.setAttribute('class', 'habit-style')
+    li.setAttribute('class', entryData.frequency) // element.frequency
+    {
+        const ul = document.querySelector('#user-tasks')
+        ul.append(li)
+    }
+}
 
 async function addNewHabit(e) {
     e.preventDefault();
     try {
         const entryData = {
-            description: e.target.habbitDescription.value,
+            description: e.target.habitDescription.value,
             frequency:e.target.frequency.value,
             user_id: localStorage.getItem('user_id')
             
@@ -302,5 +335,17 @@ async function addNewHabit(e) {
     } catch (err) {
         console.warn(err);
     }
+}
 
+async function deleteHabit(habit_id, description) {
+    const options = {
+        method : "DELETE",
+        headers: { "Content-Type": "application/json"},
+        body: JSON.stringify({"id": habit_id})
+    }
+    if (confirm(`Delete entry "${description}"?`)) {
+        fetch(`https://lap2-project-achieved.herokuapp.com/habits/${habit_id}`, options)
+    } else {
+        return;
+    }
 }

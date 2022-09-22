@@ -34,11 +34,10 @@ nav{
 a{
     text-decoration: none;
     color: var(--text);
-    padding:5px;
 }
 
 a:hover{
-    border: 5px solid var(--border)
+    transform: scale(1.2);
 }
 
 p{
@@ -114,15 +113,25 @@ h3{
     font-size: 30px;
 }
 
+.checklistTask {
+    text-align: center;
+    margin: 20px;
+    
+}
+
+
+
 #confirm {
     display: flex;
     margin-top: 5px;
 }
 
+
 #yes {
     font-size: 20px;
+    margin
     font-weight: bold;
-    margin-left: 50px;
+
 }
 
 #no {
@@ -162,12 +171,15 @@ input[type="radio"] {
 }
 
 .tasks {
+    display: flex;
+    flex-direction: column;
     font-size: 24px;
     overflow-y: hidden;
 }
 
 .tasks li {
-    margin: 30px;
+    margin: 10px;
+    list-style: none;
 }
 
 .contentFooter {
@@ -191,6 +203,7 @@ input[type="radio"] {
 .contentFooter a {
     margin-top: 30px;
     margin-right: 40px;
+    margin-bottom: 40px;
     font-size: 20px;
 }
 
@@ -247,7 +260,7 @@ h1 span:nth-child(1) {
 
   /* callender styling */
 
-#callender {
+#calender {
     cursor: pointer;
     transition: all 0.3s ease-out;
     border-radius: 50px;
@@ -311,7 +324,7 @@ h1 span:nth-child(1) {
     
 }
 
-#callender-table{
+#calender-table{
     border-spacing: 20px;
     width: 100%;
     
@@ -332,7 +345,6 @@ td{
 }
 
 .completed{
-
     background-color:var(--border);
     border-radius: 10px;
 }
@@ -346,16 +358,16 @@ td{
 }
 
 
-#habbit-description-label{
-    font-size: 30px;
+#habit-description-label{
+    font-size: 22px;
     font-weight: bold;
 }
 
-#habbitDescription{
+#habitDescription{
     padding: 20px;
     padding-bottom: 5px;
-    margin: 10px;
-    background-color: transparent;
+    font-size: 20px;
+    background-color: white;
     border: none;
     border-bottom: 5px solid var(--text);
     font-family: var(--font);
@@ -368,8 +380,29 @@ select{
     font-size: 30px;
     border: none;
     color: var(--text);
-    padding: 10px;
-    
+    padding: 10px;   
+}
+
+.habit-style {
+    display: flex;
+    font-size: 1000px;
+}
+
+#logout {
+    display: inline-block;
+}
+
+#delete {
+    display: block;
+    max-height: 20px;
+}
+
+#delete:hover {
+    transform: scale(1.2);
+}
+
+#frequency:hover {
+    border: solid 1px black;
 }
 
 #form-div{

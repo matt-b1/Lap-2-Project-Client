@@ -28,7 +28,6 @@
             <p id="dateText">The date today is: <br> <span id="date"></span></p>
         </nav>
     </section>
-
     <div class="content" id="content">
         <div id="contentHeader">
             <div id="welcome">
@@ -44,59 +43,40 @@
         </div>
         <div id = "filter">
             <label for="filter">Filter:</label>
-            
             <select id="filter">
-
                 <option value="Complete">Complete</option>
                 <option value="Incomplete">Incomplete</option>
                 <option value="none">None</option>
-               
             </select>
         </div>
         <div class="taskList">
             <div class="taskListContent">
                 <h2>Tasks for today:</h2>
                 <ul id="user-tasks" class="tasks">
-                    <li>
-                        <a href="#calender-div">
-                            Water the plants
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#callender-div">Stay hydrated</a> 
-                    </li>
-                    <li>
-                        <a href="#callender-div">Do a walk</a> 
-                    </li>
                 </ul>
             </div>
         </div>
         <div class="contentFooter">
-            <a href="#create-habbit-form">
-                <button id="addHabit"> Add a habit</button> 
-            </a>
+            <button onclick="location.hash='#create-habit-form'" id="addHabit"> Add a habit</button> 
             <a href="home_page.html" id="logout">Log out</a>
         </div>
     </div>
 
-    <div class="overlay" id="create-habbit-form">
+    <div class="overlay" id="create-habit-form">
         <div class="wrapper">
-            <h2>Create A New Habbit</h2>
+            <h2>Create A New Habit</h2>
             <hr>
             <a href="#" class="close">&times;</a>
             <div class="content">
                 <div class="container">
-                    <form id="createHabbitForm">
+                    <form action="#" id="createHabitForm">
                         <div id="form-div">
-
-                            <label id="habbit-description-label" for="habbit-description">New habbit</label>
-                            <input id="habbitDescription" name="name" type="text" placeholder="Description of habbit...">
-                            <select id="frequency" form="createHabbitForm">
-                                
+                            <label id="habit-description-label" for="habit-description">New habit</label>
+                            <input id="habitDescription" name="name" type="text" placeholder="Description of habit...">
+                            <select id="frequency" form="createHabitForm">
                                 <option value="Daily">Daily</option>
                                 <option value="Weekly">Weekly</option>
                                 <option value="Monthly">Monthly</option>
-                                
                             </select>
                         </div>
                         <div id="submit-div">
@@ -108,14 +88,16 @@
         </div>
     </div>
     
+
     <div class="overlay" id="calender-div">
+
         <div class="wrapper">
             <h2>September</h2>
             <hr>
             <a href="#" class="close">&times;</a>
             <div class="content">
                 <div class="container">
-                    <table id="callender-table">
+                    <table id="calendar-table">
                         <thead id="table-header">
                             <th>Mon</th>
                             <th>Tues</th>
@@ -186,6 +168,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
 </body>
 </html>
