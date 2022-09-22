@@ -82,34 +82,18 @@ function renderCheckList() {
             const p = document.createElement('p')
             p.textContent = `Did you complete ${task.textContent} today?`
 
-            const yesLabel = document.createElement('label')
-            yesLabel.setAttribute('for', 'yesButton')
-            yesLabel.textContent = 'Yes'
 
             const yesInput = document.createElement('input')
             yesInput.setAttribute('class','yesButton')
             yesInput.setAttribute('id',`yesButton_${task.getAttribute('id')}`)
-            yesInput.setAttribute('type','radio')
+            yesInput.setAttribute('type','checkbox')
             yesInput.setAttribute('name',`confirm_${task.getAttribute('id')}`)
             yesInput.setAttribute('value','yes')
             
-            const noLabel = document.createElement('label')
-            noLabel.setAttribute('for', 'noButton')
-            noLabel.textContent = 'No'
-
-            const noInput = document.createElement('input')
-            noInput.setAttribute('id',`noButton_${task.getAttribute('id')}`)
-            noInput.setAttribute('class','noButton')
-            noInput.setAttribute('type','radio')
-            noInput.setAttribute('name',`confirm_${task.getAttribute('id')}`)
-            noInput.setAttribute('value','no')
-            noInput.textContent = 'No'
+           
 
             div.append(p)  
-            div.append(yesLabel)  
             div.append(yesInput)
-            div.append(noLabel)
-            div.append(noInput)
             divs.push(div)
         }
 
