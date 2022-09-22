@@ -7,6 +7,7 @@ const habitButtton = document.querySelector('#addHabit');
 filterHabit;
 getDate();
 renderUser();
+clearedList();
 
 logOut.addEventListener('click', () => {
     localStorage.clear();
@@ -15,10 +16,10 @@ logOut.addEventListener('click', () => {
 async function getAllHabits(){
     try {
         const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
+        console.log(localStorage.getItem('token'));
         await fetch(`https://lap2-project-achieved.herokuapp.com/habits/user/${localStorage.getItem('user_id')}`, options)
         .then(res => res.json())
-        .then(renderAllHabits)
-        
+        .then(renderAllHabits)    
     } catch (err) {
         console.warn(err);
     }
@@ -89,13 +90,14 @@ function renderAllHabits(data){
                 dates.forEach( date => {
                     console.log(date.date)
                     if(date.date === todaysDate || li.getAttribute('class') === 'Monthly' ){
-                        task.setAttribute('class', 'habit_Completed')
+                        task.setAttribute('class', 'habit_completed')
                     } else if(parseInt(date.date.split('_')[1]) - todaysDay < 6 ){
-                        task.setAttribute('class', 'habit_Completed')
+                        task.setAttribute('class', 'habit_completed')
                     }
                 })
                 
             }
+        
         }
     })
 
@@ -112,10 +114,10 @@ function renderCheckList() {
     let divs =[];
     const tasks = document.querySelectorAll('li>a');
 
-    tasks.forEach(task => {
+    tasks.forEach(async (task) => {
         const id = task.getAttribute('id')
         const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
-        fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`,options)
+        await fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`,options)
         .then(res => res.json())
         .then(renderHabitChecklist)
         
@@ -160,11 +162,15 @@ function renderCheckList() {
                     console.log('completing tasks...')
                     task.setAttribute('class', 'habit_completed')
                 }
-            
-
             }
         }
     })
+    if(document.querySelectorAll('.habit').length === 0) {
+        const p = document.createElement('p')
+        p.textContent = `All done for today!` 
+        const checklistDiv = document.querySelector('.taskForm')
+        checklistDiv.append(p)
+    }
     checklistButton.setAttribute('hidden', 'hidden')
     hideChecklistButton.removeAttribute('hidden')
 }
@@ -174,7 +180,8 @@ function removeChecklist(){
     divs.forEach(div => {
         div.remove();
     })
-
+    const checklistDiv = document.querySelector('.taskForm')
+    checklistDiv.innerHTML = '';
     hideChecklistButton.setAttribute('hidden', 'hidden')
     checklistButton.removeAttribute('hidden')
     const submitChecklist = document.querySelector('#checklistSubmit')
@@ -217,7 +224,8 @@ function postChecklist() {
     })
    
 }
-    
+
+function clearedList() {}
 
 // getting calender modals to pop up
 
@@ -227,7 +235,7 @@ async function renderCalendar(e){
     try {
         const id = e.srcElement.getAttribute('id')
         console.log(e.srcElement.getAttribute('id'))
-        const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
+        const options = { headers: new Headers({'authorization': localStorage.getItem('token')}) }
         await fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`,options)
         .then(res => res.json())
         .then(updateCalendar)
@@ -318,15 +326,10 @@ select.addEventListener('change', (event) => {
 function filterHabit(filter) {
     let habits = document.querySelectorAll('#user-tasks li a');
     let listdiv = document.querySelectorAll('#user-tasks li');
-    for (let i = 0; i < habits.length; i++) {
-        if ((habits[i]).getAttribute('class') === 'habit_Completed') {
-            
-        }
-    }
     if (filter === 'complete') {
         for (let i = 0; i < habits.length; i++) {
             console.log(habits);
-            if ((habits[i]).getAttribute('class') === 'habit_Completed') {
+            if ((habits[i]).getAttribute('class') === 'habit_completed') {
                 listdiv[i].style.display = '';
             } else {
                 listdiv[i].style.display = 'none';
@@ -334,7 +337,7 @@ function filterHabit(filter) {
         }
     } else if (filter === 'incomplete') {
         for (let i = 0; i < habits.length; i++) {
-            if ((habits[i]).getAttribute('class') !== 'habit_Completed') {
+            if ((habits[i]).getAttribute('class') !== 'habit_completed') {
                 listdiv[i].style.display = '';
             } else {
                 listdiv[i].style.display = 'none';
@@ -389,6 +392,14 @@ function renderNewHabit(filtered){
 async function getHabitData(habit) {
     try {
         let filtered;
+        /*const options = {
+            method: "GET",
+            headers: {
+            authorization:
+                    `${localStorage.getItem('token')}`,
+                
+            }
+        }*/
         const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
         await fetch(`https://lap2-project-achieved.herokuapp.com/habits/user/${localStorage.getItem('user_id')}`, options)
         .then(res => res.json())
@@ -435,9 +446,7 @@ async function deleteHabit(habit_id, description) {
     }
     if (confirm(`Delete entry "${description}"?`)) {
         fetch(`https://lap2-project-achieved.herokuapp.com/habits/${habit_id}`, options)
-        .then(data => {
-            location.reload();
-        })
+        .then(reloadPage)
     } else {
         return;
     }
