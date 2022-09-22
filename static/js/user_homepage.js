@@ -42,20 +42,22 @@ function renderAllHabits(data){
         const a = document.createElement('a')
         const img = document.createElement('img')
         a.textContent = element.description
-        a.setAttribute('href', '#calendar-div')
-        a.setAttribute('class', 'habit')
+        a.setAttribute('href', '#calender-div')
+        a.setAttribute('class', 'habbit')
         a.setAttribute('id', element.id)
-        a.addEventListener('click', renderCalendar(a.getAttribute('id')))
+        a.addEventListener('click', renderCalendar)
+        li.append(a)
+        li.setAttribute('id', `li_${element.id}`)
+        li.setAttribute('class', 'habbit-style')
         img.setAttribute('src', '../images/delete.png')
         img.setAttribute('id', 'delete')
         img.addEventListener('click', deleteHabit.bind(this, a.getAttribute('id'), element.description))
         li.append(a)
         li.append(img)
-        li.setAttribute('class', 'habit-style')
         li.setAttribute('class', element.frequency) // element.frequency
         lis.push(li)
     });
-    console.log(lis)
+   
     lis.forEach(li => {
         const ul = document.querySelector('#user-tasks')
         ul.append(li)
@@ -154,14 +156,14 @@ function postChecklist() {
     })
    
     let date = new Date();
-    const month = date.toLocaleString('default', { month: 'numeric' });
-    const todaysDate = `${date.getDate()}_${month}_${date.getFullYear()}`
+    const month = date.toLocaleString('default', { month: '2-digit' });
+    const todaysDate = `${date.getDate()}_${month}_22`
     console.log(todaysDate);
     checkedyesButtons.forEach(yesButton => {
         try {
             const entryData = {
                 habit_id: parseInt(yesButton.getAttribute('id').split('_')[1]),
-                data: todaysDate
+                date: todaysDate
             
             }
             console.log(entryData)
@@ -187,11 +189,13 @@ function postChecklist() {
 
 // getting calender modals to pop up
 
-async function renderCalendar(habit_id){
+
+async function renderCalendar(e){
     try {
-        console.log(habit_id)
+        const id = e.srcElement.getAttribute('id')
+        console.log(e.srcElement.getAttribute('id'))
         const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
-        await fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${habit_id}`,options)
+        await fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`,options)
         .then(res => res.json())
         .then(updateCalendar)
     } catch (err) {
@@ -201,25 +205,64 @@ async function renderCalendar(habit_id){
 
 function updateCalendar(data){
     console.log(data)
-    let habitdates = [];
-    habitdates.push(data)
-    
-    const dates = document.querySelectorAll('td')
-    
-    habitdates.forEach(element => {
-        if(element.data[1] === '_' ){
-            var day = element.data.substring(0,1)
-        }else {
-            var day = element.data.substring(0,2)
-        }
-        dates.forEach(date => {
-            if(date.textContent === day){
-                date.setAttribute('class', 'completed')
+
+    if(data.err === 'Completion dates not found for this habit'){
+        console.log('do nothing')
+    } else {
+        const dates = document.querySelectorAll('td')
+        
+        
+       
+        data.forEach(element => {
+            console.log(element.habitId)
+            const list = document.getElementById(`li_${element.habitId}`)
+       
+            if(list.getAttribute('class') === 'Monthly'){
+                    
+                    dates.forEach(date => {
+                        if(date.textContent){
+                        date.setAttribute('class', 'completed')
+                        }
+                    })
+            
+                        
+                        
+            } else if(list.getAttribute('class') === 'Weekly'){
+                
+                
+                    const dateSplit = element.date.split('_')
+                    let days = []
+                    days.push(dateSplit[0]);
+                    console.log(days)
+                    for(let i = 0 ; i < 6; i++){
+                        days.push((parseInt(days[i]) + 1).toString())
+                    }
+                    days.forEach(day => {
+                        dates.forEach(date => {
+                            if(date.textContent === day){
+                                date.setAttribute('class', 'completed')
+                            } 
+                        })
+
+                    })
+                    
             } else {
-                date.removeAttribute('class', 'completed')
+                
+                    console.log(element.date)
+                    
+                    const dateSplit = element.date.split('_')
+                    const day = dateSplit[0];
+                    
+                    dates.forEach(date => {
+                        if(date.textContent === day){
+                            date.setAttribute('class', 'completed')
+                        }
+                    })
+                    
+                
             }
         })
-    })
+    }
 }
 
 function logout() {
@@ -229,11 +272,12 @@ function logout() {
 // function filterTasks() {
 //     const tasks = document.querySelectorAll(li > a)
 //     const completedTasks = tasks.filter(task => {
-//         task.getAttribute('class') = 'complete'
+//         task.getAttribute('class') = 'habbit_completed'
 //     })
-
+// 
 //     completedTasks.forEach(task => {
-
+//          const ul = document.querySelector('#user-tasks')
+//          
 //     })
 // }
 
