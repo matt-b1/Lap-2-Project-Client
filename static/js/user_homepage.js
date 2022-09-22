@@ -79,19 +79,21 @@ function renderAllHabits(data){
         .then(crossCheckDates)
         
         function crossCheckDates(dates){
-            
+            let li = document.querySelector(`#li_${id}`)
             let date = new Date();
             const month = date.toLocaleString('default', { month: '2-digit' });
             const todaysDate = `${date.getDate()}_${month}_22`
-            
+            const todaysDay = date.getDate()
             if(dates.err === 'Completion dates not found for this habit'){
                 console.log('no date')
             } else{
                 
-                console.log(dates)
+                console.log(date.getDate())
                 dates.forEach( date => {
                     console.log(date.date)
-                    if(date.date === todaysDate ){
+                    if(date.date === todaysDate || li.getAttribute('class') === 'Monthly' ){
+                        task.setAttribute('class', 'habit_Completed')
+                    } else if(parseInt(date.date.split('_')[1]) - todaysDay < 6 ){
                         task.setAttribute('class', 'habit_Completed')
                     }
                 })
@@ -197,7 +199,7 @@ function postChecklist() {
         try {
             const entryData = {
                 habit_id: parseInt(yesButton.getAttribute('id').split('_')[1]),
-                date: todaysDate
+                date: '19_09_22'
             
             }
             console.log(entryData)
