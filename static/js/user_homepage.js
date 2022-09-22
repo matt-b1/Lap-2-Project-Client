@@ -3,7 +3,8 @@ addEventListener('load', getAllHabits())
 
 
 const logOut = document.querySelector('#logout');
-const habitButtton = document.querySelector('#addHabit')
+const habitButtton = document.querySelector('#addHabit');
+filterHabit;
 getDate();
 renderUser();
 
@@ -110,7 +111,7 @@ checklistButton.addEventListener('click', renderCheckList)
 hideChecklistButton.addEventListener('click', removeChecklist)
 // render the checklist
 function renderCheckList() {
-    
+    let divs =[];
     const tasks = document.querySelectorAll('li>a');
 
     tasks.forEach(task => {
@@ -125,6 +126,7 @@ function renderCheckList() {
             const month = date.toLocaleString('default', { month: '2-digit' });
             const todaysDate = `${date.getDate()}_${month}_22`
             let count = 0;
+
             if(data.err === 'Completion dates not found for this habit'){
                 console.log('no date')
             } else{
@@ -138,39 +140,32 @@ function renderCheckList() {
             if(data.err === 'Completion dates not found for this habit' || count === 0){
                 
                 if(task.getAttribute('class') === 'habit'){
-                    
                     const div = document.createElement('div')
                     div.setAttribute('class',`confirm ${task.getAttribute('id')}`)
                     div.setAttribute('id',`checkbox_${task.getAttribute('id')}`)
-                    
                     const p = document.createElement('p')
                     p.textContent = `Did you complete ${task.textContent} today?`
-                    
-                    
                     const yesInput = document.createElement('input')
                     yesInput.setAttribute('class','yesButton')
                     yesInput.setAttribute('id',`yesButton_${task.getAttribute('id')}`)
                     yesInput.setAttribute('type','checkbox')
                     yesInput.setAttribute('name',`confirm_${task.getAttribute('id')}`)
                     yesInput.setAttribute('value','yes')
-                    
-                    
-                    
                     div.append(p)  
                     div.append(yesInput)
                     // 
                     const checklistDiv = document.querySelector('.taskForm')
                     checklistDiv.prepend(div)
 
+
                 } else {
                     console.log('completing tasks....')
                     task.setAttribute('class', 'habbit_completed')
                 }
             
-                
+
             }
         }
-       
     })
 
     const checklistDiv = document.querySelector('.taskForm')
@@ -240,8 +235,6 @@ function postChecklist() {
 }
     
 
-
-
 // getting calender modals to pop up
 
 
@@ -301,6 +294,7 @@ function updateCalendar(data){
 
                     })
                     
+
             } else {
                 
                     console.log(element.date)
@@ -318,8 +312,8 @@ function updateCalendar(data){
             }
         })
     }
-    
-}
+)}
+
 
 function logout() {
     localStorage.clear();
@@ -339,13 +333,67 @@ function logout() {
 
 // Add the post habit function
 
+function filterHabit() {
+    const completedTasks = tasks.filter(task => {
+            task.getAttribute('class') = 'habbit_completed'
+    })
+    console.log(completedTasks);
+}
+
 const habitForm = document.querySelector('#createHabitForm');
 habitForm.addEventListener('submit', (e) => {
     addNewHabit(e);
-    
+    getHabitData(e.target.habitDescription.value);
 })
 
+function renderNewHabit(filtered){
+    let entryData;
+    let entryId;
+    for (let entry of filtered) { 
+        entryData = {
+            description: entry.description,
+            frequency: entry.frequency,
+            user_id: localStorage.getItem('user_id')
+        }
+        entryId = entry.id;
+    }
+    console.log(entryData);
+    const li = document.createElement('li')
+    const a = document.createElement('a')
+    const img = document.createElement('img')
+    a.textContent = entryData.description
+    a.setAttribute('href', '#calendar-div')
+    a.setAttribute('class', 'habit')
+    a.setAttribute('id', entryData.id)
+    a.addEventListener('click', renderCalendar(a.getAttribute('id')))
+    img.setAttribute('src', '../images/delete.png')
+    img.setAttribute('id', 'delete')
+    img.addEventListener('click', deleteHabit.bind(this, entryId, entryData.description))
+    li.append(a)
+    li.append(img)
+    li.setAttribute('class', 'habit-style')
+    li.setAttribute('class', entryData.frequency) // element.frequency
+    {
+        const ul = document.querySelector('#user-tasks')
+        ul.append(li)
+    }
+}
 
+async function getHabitData(habit) {
+    try {
+        let filtered;
+        const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
+        await fetch(`https://lap2-project-achieved.herokuapp.com/habits/user/${localStorage.getItem('user_id')}`, options)
+        .then(res => res.json())
+        .then(data =>  {
+                filtered = data.filter(match => match.description === habit)
+            }
+        )
+        renderNewHabit(filtered)
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 async function addNewHabit(e) {
     e.preventDefault();
@@ -354,7 +402,6 @@ async function addNewHabit(e) {
             description: e.target.habitDescription.value,
             frequency:e.target.frequency.value,
             user_id: localStorage.getItem('user_id')
-            
         }
         console.log(entryData)
         const options = {
@@ -363,15 +410,14 @@ async function addNewHabit(e) {
             body: JSON.stringify(entryData)
         }
         fetch(`https://lap2-project-achieved.herokuapp.com/habits`, options)
-        .then(res => res.json())
-        .then(reloadPage)
+        .then(reloadPage);
     } catch (err) {
         console.warn(err);
     }
 }
 
-function reloadPage(){
-    location.reload()
+function reloadPage() {
+    location.reload();
 }
 
 async function deleteHabit(habit_id, description) {
@@ -382,6 +428,9 @@ async function deleteHabit(habit_id, description) {
     }
     if (confirm(`Delete entry "${description}"?`)) {
         fetch(`https://lap2-project-achieved.herokuapp.com/habits/${habit_id}`, options)
+        .then(data => {
+            location.reload();
+        })
     } else {
         return;
     }
