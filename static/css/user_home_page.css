@@ -99,8 +99,10 @@ h3{
 
 .taskForm{
     margin-top: 40px;
-    border: 5px solid var(--border);
-    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .taskFormContent {
@@ -429,3 +431,35 @@ select{
     border: none;
     border-radius: 10px;
 }
+
+
+#checklistButton,#hideChecklist,#checklistSubmit{
+    padding: 20px;
+    font-size: 20px;
+    font-family: var(--font);
+    margin:10px;
+    background-color: var(--text);
+    color: var(--background);
+    border:none;
+    border-radius: 10px;
+
+}
+
+#checklistButton-div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.taskForm > div{
+    font-size: 15px;
+    margin: 10px;
+    display: flex;
+    justify-content: space-around;
+    
+}
+.yesButton{
+   width: 20px;
+   margin-left: 10px;
+}
+
