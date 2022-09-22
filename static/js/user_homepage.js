@@ -76,19 +76,21 @@ function renderAllHabits(data){
         .then(crossCheckDates)
         
         function crossCheckDates(dates){
-            
+            let li = document.querySelector(`#li_${id}`)
             let date = new Date();
             const month = date.toLocaleString('default', { month: '2-digit' });
             const todaysDate = `${date.getDate()}_${month}_22`
-            
+            const todaysDay = date.getDate()
             if(dates.err === 'Completion dates not found for this habit'){
                 console.log('no date')
             } else{
                 
-                console.log(dates)
+                console.log(date.getDate())
                 dates.forEach( date => {
                     console.log(date.date)
-                    if(date.date === todaysDate ){
+                    if(date.date === todaysDate || li.getAttribute('class') === 'Monthly' ){
+                        task.setAttribute('class', 'habit_Completed')
+                    } else if(parseInt(date.date.split('_')[1]) - todaysDay < 6 ){
                         task.setAttribute('class', 'habit_Completed')
                     }
                 })
@@ -194,7 +196,7 @@ function postChecklist() {
         try {
             const entryData = {
                 habit_id: parseInt(yesButton.getAttribute('id').split('_')[1]),
-                date: todaysDate
+                date: '19_09_22'
             
             }
             console.log(entryData)
@@ -221,6 +223,7 @@ function postChecklist() {
 
 
 async function renderCalendar(e){
+    
     try {
         const id = e.srcElement.getAttribute('id')
         console.log(e.srcElement.getAttribute('id'))
@@ -238,6 +241,11 @@ async function renderCalendar(e){
 
 function updateCalendar(data){
     console.log(data)
+    const tds = document.querySelectorAll('td')
+
+    tds.forEach(td => {
+        td.removeAttribute('class')
+    })
 
     if(data.err === 'Completion dates not found for this habit'){
         console.log('do nothing')
@@ -300,20 +308,7 @@ function updateCalendar(data){
 function logout() {
     localStorage.clear();
 }
-// add filter for complete, incomplete , none
-// function filterTasks() {
-//     const tasks = document.querySelectorAll(li > a)
-//     const completedTasks = tasks.filter(task => {
-//         task.getAttribute('class') = 'habbit_completed'
-//     })
 
-//     completedTasks.forEach(task => {
-//          const ul = document.querySelector('#user-tasks')
-         
-//     })
-// }
-
-// Add the post habit function
 
 const select = document.querySelector('#filterSelect');
 select.addEventListener('change', (event) => {
