@@ -240,7 +240,37 @@ function logout() {
 // Add the post habit function
 
 const habitForm = document.querySelector('#createHabitForm');
-habitForm.addEventListener('submit', addNewHabit )
+habitForm.addEventListener('submit', (e) => {
+    addNewHabit(e);
+    renderNewHabit(e)
+})
+
+function renderNewHabit(e){
+    const entryData = {
+        description: e.target.habitDescription.value,
+        frequency:e.target.frequency.value,
+        user_id: localStorage.getItem('user_id')
+    }
+    const li = document.createElement('li')
+    const a = document.createElement('a')
+    const img = document.createElement('img')
+    a.textContent = entryData.description
+    a.setAttribute('href', '#calendar-div')
+    a.setAttribute('class', 'habit')
+    a.setAttribute('id', entryData.id)
+    a.addEventListener('click', renderCalendar(a.getAttribute('id')))
+    img.setAttribute('src', '../images/delete.png')
+    img.setAttribute('id', 'delete')
+    img.addEventListener('click', deleteHabit.bind(this, a.getAttribute('id'), entryData.description))
+    li.append(a)
+    li.append(img)
+    li.setAttribute('class', 'habit-style')
+    li.setAttribute('class', entryData.frequency) // element.frequency
+    {
+        const ul = document.querySelector('#user-tasks')
+        ul.append(li)
+    }
+}
 
 async function addNewHabit(e) {
     e.preventDefault();
