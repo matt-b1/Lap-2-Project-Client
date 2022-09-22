@@ -69,8 +69,6 @@ checklistButton.addEventListener('click', renderCheckList)
 hideChecklistButton.addEventListener('click', removeChecklist)
 // render the checklist
 function renderCheckList() {
-
-    
     let divs =[];
     const tasks = document.querySelectorAll('li>a');
    
@@ -183,8 +181,6 @@ function postChecklist() {
 }
     
 
-
-
 // getting calender modals to pop up
 
 async function renderCalendar(habit_id){
@@ -200,7 +196,6 @@ async function renderCalendar(habit_id){
 }
 
 function updateCalendar(data){
-    console.log(data)
     let habitdates = [];
     habitdates.push(data)
     
@@ -242,15 +237,22 @@ function logout() {
 const habitForm = document.querySelector('#createHabitForm');
 habitForm.addEventListener('submit', (e) => {
     addNewHabit(e);
+    getHabitData(e.target.habitDescription.value);
     renderNewHabit(e)
 })
 
-function renderNewHabit(e){
-    const entryData = {
-        description: e.target.habitDescription.value,
-        frequency:e.target.frequency.value,
-        user_id: localStorage.getItem('user_id')
+function renderNewHabit(filtered){
+    let entryData;
+    let entryId;
+    for (let entry of filtered) { 
+        entryData = {
+            description: entry.description,
+            frequency: entry.frequency,
+            user_id: localStorage.getItem('user_id')
+        }
+        entryId = entry.id;
     }
+    console.log(entryData);
     const li = document.createElement('li')
     const a = document.createElement('a')
     const img = document.createElement('img')
@@ -261,7 +263,7 @@ function renderNewHabit(e){
     a.addEventListener('click', renderCalendar(a.getAttribute('id')))
     img.setAttribute('src', '../images/delete.png')
     img.setAttribute('id', 'delete')
-    img.addEventListener('click', deleteHabit.bind(this, a.getAttribute('id'), entryData.description))
+    img.addEventListener('click', deleteHabit.bind(this, entryId, entryData.description))
     li.append(a)
     li.append(img)
     li.setAttribute('class', 'habit-style')
@@ -269,6 +271,22 @@ function renderNewHabit(e){
     {
         const ul = document.querySelector('#user-tasks')
         ul.append(li)
+    }
+}
+
+async function getHabitData(habit) {
+    try {
+        const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
+        await fetch(`https://lap2-project-achieved.herokuapp.com/habits/user/${localStorage.getItem('user_id')}`, options)
+        .then(res => res.json())
+        .then(data =>  {
+            const filtered = data.filter(match => match.description === habit)
+            renderNewHabit(filtered)
+            }
+        )
+        
+    } catch (err) {
+        console.log(err);
     }
 }
 
@@ -301,6 +319,9 @@ async function deleteHabit(habit_id, description) {
     }
     if (confirm(`Delete entry "${description}"?`)) {
         fetch(`https://lap2-project-achieved.herokuapp.com/habits/${habit_id}`, options)
+        .then(data => {
+            location.reload();
+        })
     } else {
         return;
     }
