@@ -96,7 +96,6 @@ function renderAllHabits(data){
                 })
                 
             }
-            
         }
     })
 
@@ -145,6 +144,7 @@ function renderCheckList() {
                     const p = document.createElement('p')
                     p.textContent = `Did you complete ${task.textContent} today?`
                     const yesInput = document.createElement('input')
+                    yesInput.addEventListener('click', postChecklist)
                     yesInput.setAttribute('class','yesButton')
                     yesInput.setAttribute('id',`yesButton_${task.getAttribute('id')}`)
                     yesInput.setAttribute('type','checkbox')
@@ -154,35 +154,20 @@ function renderCheckList() {
                     div.append(yesInput)
                     // 
                     const checklistDiv = document.querySelector('.taskForm')
-                    checklistDiv.prepend(div)
-
+                    checklistDiv.append(div)
 
                 } else {
-                    console.log('completing tasks....')
-                    task.setAttribute('class', 'habbit_completed')
+                    console.log('completing tasks...')
+                    task.setAttribute('class', 'habit_completed')
                 }
             
 
             }
         }
     })
-
-    const checklistDiv = document.querySelector('.taskForm')
-
-    const submitChecklist = document.createElement('button')
-    submitChecklist.setAttribute('id', 'checklistSubmit')
-    submitChecklist.textContent = 'Submit Checklist'
-    submitChecklist.addEventListener('click', postChecklist)
-    checklistDiv.append(submitChecklist)
-
-
-
     checklistButton.setAttribute('hidden', 'hidden')
     hideChecklistButton.removeAttribute('hidden')
 }
-
-
-
 
 function removeChecklist(){
     const divs = document.querySelectorAll('.confirm')
@@ -228,7 +213,7 @@ function postChecklist() {
         const yesdiv = document.querySelector(`#checkbox_${yesButton.getAttribute('id').split('_')[1]}`)
         yesdiv.remove()
         const task = document.getElementById(`${yesButton.getAttribute('id').split('_')[1]}`)
-        task.setAttribute('class', 'habbit_completed')
+        task.setAttribute('class', 'habit_completed')
     })
    
 }
@@ -308,7 +293,7 @@ function updateCalendar(data){
             }
         })
     }
-)}
+}
 
 function logout() {
     localStorage.clear();
@@ -328,11 +313,36 @@ function logout() {
 
 // Add the post habit function
 
-function filterHabit() {
-    const completedTasks = tasks.filter(task => {
-            task.getAttribute('class') = 'habbit_completed'
-    })
-    console.log(completedTasks);
+const select = document.querySelector('#filterSelect');
+select.addEventListener('change', (event) => {
+    filterHabit(event.target.value);
+})
+
+function filterHabit(filter) {
+    let habits = document.querySelectorAll('#user-tasks li a');
+    let listdiv = document.querySelectorAll('#user-tasks li');
+    if (filter === 'complete') {
+        for (let i = 0; i < habits.length; i++) {
+            console.log(habits);
+            if ((habits[i]).getAttribute('class') === 'habit_Completed') {
+                listdiv[i].style.display = '';
+            } else {
+                listdiv[i].style.display = 'none';
+            }
+        }
+    } else if (filter === 'incomplete') {
+        for (let i = 0; i < habits.length; i++) {
+            if ((habits[i]).getAttribute('class') !== 'habit_Completed') {
+                listdiv[i].style.display = '';
+            } else {
+                listdiv[i].style.display = 'none';
+            }
+        }
+    } else if (filter === 'all') {
+        for (let i = 0; i < habits.length; i++) {
+            listdiv[i].style.display = '';
+        }
+    }
 }
 
 const habitForm = document.querySelector('#createHabitForm');
