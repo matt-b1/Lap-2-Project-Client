@@ -43,18 +43,17 @@ function renderAllHabits(data){
         const img = document.createElement('img')
         a.textContent = element.description
         a.setAttribute('href', '#calender-div')
-        a.setAttribute('class', 'habbit')
+        a.setAttribute('class', 'habit')
         a.setAttribute('id', element.id)
         a.addEventListener('click', renderCalendar)
         li.append(a)
         li.setAttribute('id', `li_${element.id}`)
-        li.setAttribute('class', 'habbit-style')
+        li.setAttribute('class', element.frequency) // element.frequency
         img.setAttribute('src', '../images/delete.png')
         img.setAttribute('id', 'delete')
         img.addEventListener('click', deleteHabit.bind(this, a.getAttribute('id'), element.description))
         li.append(a)
         li.append(img)
-        li.setAttribute('class', element.frequency) // element.frequency
         lis.push(li)
     });
    
@@ -83,34 +82,18 @@ function renderCheckList() {
             const p = document.createElement('p')
             p.textContent = `Did you complete ${task.textContent} today?`
 
-            const yesLabel = document.createElement('label')
-            yesLabel.setAttribute('for', 'yesButton')
-            yesLabel.textContent = 'Yes'
 
             const yesInput = document.createElement('input')
             yesInput.setAttribute('class','yesButton')
             yesInput.setAttribute('id',`yesButton_${task.getAttribute('id')}`)
-            yesInput.setAttribute('type','radio')
+            yesInput.setAttribute('type','checkbox')
             yesInput.setAttribute('name',`confirm_${task.getAttribute('id')}`)
             yesInput.setAttribute('value','yes')
             
-            const noLabel = document.createElement('label')
-            noLabel.setAttribute('for', 'noButton')
-            noLabel.textContent = 'No'
-
-            const noInput = document.createElement('input')
-            noInput.setAttribute('id',`noButton_${task.getAttribute('id')}`)
-            noInput.setAttribute('class','noButton')
-            noInput.setAttribute('type','radio')
-            noInput.setAttribute('name',`confirm_${task.getAttribute('id')}`)
-            noInput.setAttribute('value','no')
-            noInput.textContent = 'No'
+           
 
             div.append(p)  
-            div.append(yesLabel)  
             div.append(yesInput)
-            div.append(noLabel)
-            div.append(noInput)
             divs.push(div)
         }
 
@@ -200,7 +183,6 @@ async function renderCalendar(e){
 }
 
 function updateCalendar(data){
-<<<<<<< HEAD
     let habitdates = [];
     habitdates.push(data)
     
@@ -215,50 +197,6 @@ function updateCalendar(data){
         dates.forEach(date => {
             if(date.textContent === day){
                 date.setAttribute('class', 'completed')
-=======
-    console.log(data)
-
-    if(data.err === 'Completion dates not found for this habit'){
-        console.log('do nothing')
-    } else {
-        const dates = document.querySelectorAll('td')
-        
-        
-       
-        data.forEach(element => {
-            console.log(element.habitId)
-            const list = document.getElementById(`li_${element.habitId}`)
-       
-            if(list.getAttribute('class') === 'Monthly'){
-                    
-                    dates.forEach(date => {
-                        if(date.textContent){
-                        date.setAttribute('class', 'completed')
-                        }
-                    })
-            
-                        
-                        
-            } else if(list.getAttribute('class') === 'Weekly'){
-                
-                
-                    const dateSplit = element.date.split('_')
-                    let days = []
-                    days.push(dateSplit[0]);
-                    console.log(days)
-                    for(let i = 0 ; i < 6; i++){
-                        days.push((parseInt(days[i]) + 1).toString())
-                    }
-                    days.forEach(day => {
-                        dates.forEach(date => {
-                            if(date.textContent === day){
-                                date.setAttribute('class', 'completed')
-                            } 
-                        })
-
-                    })
-                    
->>>>>>> 9f05b594d8adc629d78d3cf5bbf055b535b19086
             } else {
                 
                     console.log(element.date)
@@ -276,7 +214,7 @@ function updateCalendar(data){
             }
         })
     }
-}
+)}
 
 function logout() {
     localStorage.clear();
@@ -300,7 +238,6 @@ const habitForm = document.querySelector('#createHabitForm');
 habitForm.addEventListener('submit', (e) => {
     addNewHabit(e);
     getHabitData(e.target.habitDescription.value);
-    renderNewHabit(e)
 })
 
 function renderNewHabit(filtered){
@@ -338,15 +275,15 @@ function renderNewHabit(filtered){
 
 async function getHabitData(habit) {
     try {
+        let filtered;
         const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
         await fetch(`https://lap2-project-achieved.herokuapp.com/habits/user/${localStorage.getItem('user_id')}`, options)
         .then(res => res.json())
         .then(data =>  {
-            const filtered = data.filter(match => match.description === habit)
-            renderNewHabit(filtered)
+                filtered = data.filter(match => match.description === habit)
             }
         )
-        
+        renderNewHabit(filtered)
     } catch (err) {
         console.log(err);
     }
@@ -359,7 +296,6 @@ async function addNewHabit(e) {
             description: e.target.habitDescription.value,
             frequency:e.target.frequency.value,
             user_id: localStorage.getItem('user_id')
-            
         }
         console.log(entryData)
         const options = {
@@ -368,9 +304,14 @@ async function addNewHabit(e) {
             body: JSON.stringify(entryData)
         }
         fetch(`https://lap2-project-achieved.herokuapp.com/habits`, options)
+        .then(reloadPage);
     } catch (err) {
         console.warn(err);
     }
+}
+
+function reloadPage() {
+    location.reload();
 }
 
 async function deleteHabit(habit_id, description) {
