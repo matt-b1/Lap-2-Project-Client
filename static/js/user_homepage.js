@@ -35,20 +35,16 @@ function renderUser() {
 }
 
 function renderAllHabits(data){
-    
-
-
-    
         let lis = [];
         console.log(data);
         data.forEach(element => {
             console.log('loading to do list...')
             const li = document.createElement('li')
             const a = document.createElement('a')
+            const iconDiv = document.createElement('div')
             const img = document.createElement('img')
             a.textContent = element.description
             a.setAttribute('href', '#calender-div')
-            
             a.setAttribute('class', 'habit')
             a.setAttribute('id', element.id)
             a.addEventListener('click', renderCalendar)
@@ -58,9 +54,10 @@ function renderAllHabits(data){
             img.setAttribute('src', '../images/delete.png')
             img.setAttribute('id', 'delete')
             img.addEventListener('click', deleteHabit.bind(this, a.getAttribute('id'), element.description))
-            
+            iconDiv.setAttribute('id', 'iconDiv')
+            iconDiv.append(img);
             li.append(a)
-            li.append(img)
+            li.append(iconDiv)
             lis.push(li)
         });
     
@@ -326,6 +323,11 @@ select.addEventListener('change', (event) => {
 function filterHabit(filter) {
     let habits = document.querySelectorAll('#user-tasks li a');
     let listdiv = document.querySelectorAll('#user-tasks li');
+    for (let i = 0; i < habits.length; i++) {
+        if ((habits[i]).getAttribute('class') === 'habit_Completed') {
+            
+        }
+    }
     if (filter === 'complete') {
         for (let i = 0; i < habits.length; i++) {
             console.log(habits);

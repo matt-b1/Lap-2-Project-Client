@@ -121,7 +121,32 @@ h3{
     
 }
 
+#filter label {
+    margin: 10px;
+    font-weight: bold;
+    font-size: 20px;
+}
 
+#filterSelect{
+    background-color: white;
+    color: black;
+    border: 3px solid black;
+    border-radius: 5px;
+    font-size: 24px;
+    font-style: italic;
+    font-weight: bold;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+#status1 {
+    max-height: 20px;
+    margin-top: 2px;
+    margin-right: 20px;
+}
+
+#iconDiv {
+    display: flex;
+}
 
 #confirm {
     display: flex;
@@ -410,7 +435,7 @@ select{
 
 #delete {
     display: block;
-    max-height: 20px;
+    max-height: 24px;
 }
 
 #delete:hover {
