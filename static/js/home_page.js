@@ -54,11 +54,16 @@ async function checkUsernameExists(e) {
 
 async function registerAccount(e) {
     e.preventDefault();
+
+    let date = new Date();
+    const month = date.toLocaleString('default', { month: '2-digit' });
+    const todaysDate = `${date.getDate()}_${month}_22`
+
     if (e.target.password.value === e.target.confirmpassword.value) { 
         const options = {
             method : "POST",
             headers: { "Content-Type": "application/json"},
-            body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
+            body: JSON.stringify({ name: e.target.name1.value, password: e.target.password1.value, last_update: todaysDate })
         }
         await fetch("https://lap2-project-achieved.herokuapp.com/users", options);
         alert(`Account ${e.target.name.value} successfully registered.`)
@@ -135,6 +140,8 @@ function login(token) {
     localStorage.setItem('token', token);
     localStorage.setItem('username', decodedToken.username);
     localStorage.setItem('user_id', decodedToken.user_id);
+    localStorage.setItem('streak', decodedToken.streak);
+    localStorage.setItem('last_update', decodedToken.last_update);
     window.location.href = 'user_home_page.html';
     resetLogin();
 }
