@@ -264,9 +264,6 @@ function updateCalendar(data){
         console.log('do nothing')
     } else {
         const dates = document.querySelectorAll('td')
-        
-        
-       
         data.forEach(element => {
             console.log(element.habitId)
             const list = document.getElementById(`li_${element.habitId}`)
