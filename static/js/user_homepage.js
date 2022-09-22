@@ -251,20 +251,46 @@ async function renderCalendar(e){
 }
 
 function updateCalendar(data){
-    let habitdates = [];
-    habitdates.push(data)
-    
-    const dates = document.querySelectorAll('td')
-    
-    habitdates.forEach(element => {
-        if(element.data[1] === '_' ){
-            var day = element.data.substring(0,1)
-        }else {
-            var day = element.data.substring(0,2)
-        }
-        dates.forEach(date => {
-            if(date.textContent === day){
-                date.setAttribute('class', 'completed')
+    console.log(data)
+
+    if(data.err === 'Completion dates not found for this habit'){
+        console.log('do nothing')
+    } else {
+        const dates = document.querySelectorAll('td')
+        data.forEach(element => {
+            console.log(element.habitId)
+            const list = document.getElementById(`li_${element.habitId}`)
+       
+            if(list.getAttribute('class') === 'Monthly'){
+                    
+                    dates.forEach(date => {
+                        if(date.textContent){
+                        date.setAttribute('class', 'completed')
+                        }
+                    })
+            
+                        
+                        
+            } else if(list.getAttribute('class') === 'Weekly'){
+                
+                
+                    const dateSplit = element.date.split('_')
+                    let days = []
+                    days.push(dateSplit[0]);
+                    console.log(days)
+                    for(let i = 0 ; i < 6; i++){
+                        days.push((parseInt(days[i]) + 1).toString())
+                    }
+                    days.forEach(day => {
+                        dates.forEach(date => {
+                            if(date.textContent === day){
+                                date.setAttribute('class', 'completed')
+                            } 
+                        })
+
+                    })
+                    
+
             } else {
                 
                     console.log(element.date)
