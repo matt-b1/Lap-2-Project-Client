@@ -224,6 +224,7 @@ function postChecklist() {
 
 
 async function renderCalendar(e){
+    
     try {
         const id = e.srcElement.getAttribute('id')
         console.log(e.srcElement.getAttribute('id'))
@@ -241,6 +242,11 @@ async function renderCalendar(e){
 
 function updateCalendar(data){
     console.log(data)
+    const tds = document.querySelectorAll('td')
+
+    tds.forEach(td => {
+        td.removeAttribute('class')
+    })
 
     if(data.err === 'Completion dates not found for this habit'){
         console.log('do nothing')
@@ -303,20 +309,7 @@ function updateCalendar(data){
 function logout() {
     localStorage.clear();
 }
-// add filter for complete, incomplete , none
-// function filterTasks() {
-//     const tasks = document.querySelectorAll(li > a)
-//     const completedTasks = tasks.filter(task => {
-//         task.getAttribute('class') = 'habbit_completed'
-//     })
 
-//     completedTasks.forEach(task => {
-//          const ul = document.querySelector('#user-tasks')
-         
-//     })
-// }
-
-// Add the post habit function
 
 const select = document.querySelector('#filterSelect');
 select.addEventListener('change', (event) => {
