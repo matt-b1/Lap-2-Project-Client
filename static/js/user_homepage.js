@@ -43,18 +43,17 @@ function renderAllHabits(data){
         const img = document.createElement('img')
         a.textContent = element.description
         a.setAttribute('href', '#calender-div')
-        a.setAttribute('class', 'habbit')
+        a.setAttribute('class', 'habit')
         a.setAttribute('id', element.id)
         a.addEventListener('click', renderCalendar)
         li.append(a)
         li.setAttribute('id', `li_${element.id}`)
-        li.setAttribute('class', 'habbit-style')
+        li.setAttribute('class', element.frequency) // element.frequency
         img.setAttribute('src', '../images/delete.png')
         img.setAttribute('id', 'delete')
         img.addEventListener('click', deleteHabit.bind(this, a.getAttribute('id'), element.description))
         li.append(a)
         li.append(img)
-        li.setAttribute('class', element.frequency) // element.frequency
         lis.push(li)
     });
    
@@ -270,35 +269,10 @@ function logout() {
 const habitForm = document.querySelector('#createHabitForm');
 habitForm.addEventListener('submit', (e) => {
     addNewHabit(e);
-    renderNewHabit(e)
+    
 })
 
-function renderNewHabit(e){
-    const entryData = {
-        description: e.target.habitDescription.value,
-        frequency:e.target.frequency.value,
-        user_id: localStorage.getItem('user_id')
-    }
-    const li = document.createElement('li')
-    const a = document.createElement('a')
-    const img = document.createElement('img')
-    a.textContent = entryData.description
-    a.setAttribute('href', '#calendar-div')
-    a.setAttribute('class', 'habit')
-    a.setAttribute('id', entryData.id)
-    a.addEventListener('click', renderCalendar(a.getAttribute('id')))
-    img.setAttribute('src', '../images/delete.png')
-    img.setAttribute('id', 'delete')
-    img.addEventListener('click', deleteHabit.bind(this, a.getAttribute('id'), entryData.description))
-    li.append(a)
-    li.append(img)
-    li.setAttribute('class', 'habit-style')
-    li.setAttribute('class', entryData.frequency) // element.frequency
-    {
-        const ul = document.querySelector('#user-tasks')
-        ul.append(li)
-    }
-}
+
 
 async function addNewHabit(e) {
     e.preventDefault();
@@ -316,9 +290,15 @@ async function addNewHabit(e) {
             body: JSON.stringify(entryData)
         }
         fetch(`https://lap2-project-achieved.herokuapp.com/habits`, options)
+        .then(res => res.json())
+        .then(reloadPage)
     } catch (err) {
         console.warn(err);
     }
+}
+
+function reloadPage(){
+    location.reload()
 }
 
 async function deleteHabit(habit_id, description) {
