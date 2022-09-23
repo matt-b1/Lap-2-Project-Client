@@ -139,7 +139,7 @@ function appendStreak(habitList) {
     // update counter in html
     setTimeout(() => {
         document.querySelector('#streakCounter').textContent = `Current Streak: ${localStorage.getItem('streak')} days`;
-    }, 500)
+    }, 1000)
     }
 
 function updateLocalStorage(token) {
