@@ -1,5 +1,6 @@
 const renderDOM = require('./helpers')
 
+
 let dom;
 let document;
 
@@ -20,8 +21,8 @@ describe('user_home_page.html', () =>{
 
     it('check get checklist button renders list of items to do', () => {
         const getChecklist = document.querySelector('#checklistButton')
-        getChecklist.dispatchEvent(new dom.window.Event('click'))
         const taskForm = document.querySelector('.taskForm')
+        getChecklist.dispatchEvent(new dom.window.Event('click'))
         expect(taskForm.hasChildNodes()).toBe(true)
     })
 })
