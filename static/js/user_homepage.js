@@ -1,13 +1,11 @@
 // when page load, fetch all the habits
 addEventListener('load', getAllHabits())
 
-
 const logOut = document.querySelector('#logout');
 const habitButtton = document.querySelector('#addHabit');
 filterHabit;
 getDate();
 renderUser();
-clearedList();
 
 logOut.addEventListener('click', () => {
     localStorage.clear();
@@ -20,7 +18,10 @@ async function getAllHabits(){
         .then(res => res.json())
         .then(res => {
             renderAllHabits(res)
-            appendStreak(res)
+            setTimeout(() => {
+                appendStreak(res);
+              }, 500)
+            
         })
     } catch (err) {
         console.warn(err);
@@ -32,9 +33,11 @@ function appendStreak(habitList) {
     if (!!habitList.length) {
 
         let allTasksCompleted = true
+
         const tasks = document.querySelectorAll('li>a');
         tasks.forEach(task => {
 	        if (task.getAttribute('class') === 'habit'){
+                console.log(task.getAttribute('class'))
 		        allTasksCompleted = false
 	        }
         })
@@ -42,12 +45,13 @@ function appendStreak(habitList) {
         let date = new Date();
         const month = date.toLocaleString('default', { month: '2-digit' });
         const todaysDate = `${date.getDate()}_${month}_22`
+        const yesterdaysDate = `${date.getDate()-1}_${month}_22`
         const daysFromLastUpdate = date.getDate() - parseInt(localStorage.getItem('last_update').split('_')[0])
 
         if (!!allTasksCompleted){
             if (daysFromLastUpdate !== 0) {
                 //update streak count
-
+                console.log(parseInt(localStorage.getItem('streak')) + daysFromLastUpdate)
                 let changes = {
                     column_to_change: "streak", 
                     value: parseInt(localStorage.getItem('streak')) + daysFromLastUpdate,
@@ -67,23 +71,25 @@ function appendStreak(habitList) {
 
                 //update last_update
 
-                changes = {
+                let changes_1 = {
                     column_to_change: "last_update", 
                     value: todaysDate,
                     user_id: parseInt(localStorage.getItem('user_id'))
                 }
 
-                options = {
+                let options_1 = {
                     method: 'PATCH',
-                    body: JSON.stringify(changes),
+                    body: JSON.stringify(changes_1),
                     headers: {
                         "Content-Type": "application/json"
                     }
                 };
 
-                fetch('https://lap2-project-achieved.herokuapp.com/users', options)
-                    .then(res => res.json())
-                    .then(data => updateLocalStorage(data.token))
+                setTimeout(() => {
+                    fetch('https://lap2-project-achieved.herokuapp.com/users', options_1)
+                        .then(res => res.json())
+                        .then(data => updateLocalStorage(data.token));
+                  }, 100)
             }
         } else {
             if (daysFromLastUpdate > 1) {
@@ -108,29 +114,33 @@ function appendStreak(habitList) {
 
                 //update last_update
 
-                changes = {
+                let changes_1 = {
                     column_to_change: "last_update", 
-                    value: todaysDate,
+                    value: yesterdaysDate,
                     user_id: parseInt(localStorage.getItem('user_id'))
                 }
 
-                options = {
+                let options_1 = {
                     method: 'PATCH',
-                    body: JSON.stringify(changes),
+                    body: JSON.stringify(changes_1),
                     headers: {
                         "Content-Type": "application/json"
                     }
                 };
 
-                fetch('https://lap2-project-achieved.herokuapp.com/users', options)
-                    .then(res => res.json())
-                    .then(data => updateLocalStorage(data.token))
+                setTimeout(() => {
+                    fetch('https://lap2-project-achieved.herokuapp.com/users', options_1)
+                        .then(res => res.json())
+                        .then(data => updateLocalStorage(data.token))
+                }, 100)
             }
         }
     }
     // update counter in html
-    document.querySelector('#streakCounter').textContent = `Current Streak: ${localStorage.getItem('streak')} days`
-}
+    setTimeout(() => {
+        document.querySelector('#streakCounter').textContent = `Current Streak: ${localStorage.getItem('streak')} days`;
+    }, 1000)
+    }
 
 function updateLocalStorage(token) {
     const decodedToken = jwt_decode(token);
@@ -151,71 +161,67 @@ function renderUser() {
     document.querySelector('#user').textContent = `${localStorage.getItem('username')}`;
 }
 
-function renderAllHabits(data){
-        let lis = [];
-        data.forEach(element => {
-            console.log('loading to do list...')
-            const li = document.createElement('li')
-            const a = document.createElement('a')
-            const iconDiv = document.createElement('div')
-            const img = document.createElement('img')
-            a.textContent = element.description
-            a.setAttribute('href', '#calender-div')
-            a.setAttribute('class', 'habit')
-            a.setAttribute('id', element.id)
-            a.addEventListener('click', renderCalendar)
-            li.append(a)
-            li.setAttribute('id', `li_${element.id}`)
-            li.setAttribute('class', element.frequency) // element.frequency
-            img.setAttribute('src', '../images/delete.png')
-            img.setAttribute('id', 'delete')
-            img.addEventListener('click', deleteHabit.bind(this, a.getAttribute('id'), element.description))
-            iconDiv.setAttribute('id', 'iconDiv')
-            iconDiv.append(img);
-            li.append(a)
-            li.append(iconDiv)
-            lis.push(li)
-        });
-    
-        lis.forEach(li => {
-            const ul = document.querySelector('#user-tasks')
-            ul.append(li)
-        })
+function renderAllHabits(data) {
+    let lis = [];
+    data.forEach(element => {
+        console.log('loading to do list...')
+        const li = document.createElement('li')
+        const a = document.createElement('a')
+        const iconDiv = document.createElement('div')
+        const img = document.createElement('img')
+        a.textContent = element.description
+        a.setAttribute('href', '#calender-div')
+        a.setAttribute('class', 'habit')
+        a.setAttribute('id', element.id)
+        a.addEventListener('click', renderCalendar)
+        li.append(a)
+        li.setAttribute('id', `li_${element.id}`)
+        li.setAttribute('class', element.frequency) // element.frequency
+        img.setAttribute('src', '../images/delete.png')
+        img.setAttribute('id', 'delete')
+        img.addEventListener('click', deleteHabit.bind(this, a.getAttribute('id'), element.description))
+        iconDiv.setAttribute('id', 'iconDiv')
+        iconDiv.append(img);
+        li.append(a)
+        li.append(iconDiv)
+        lis.push(li)
+    });
 
-        const tasks = document.querySelectorAll('li>a');
+    lis.forEach(li => {
+        const ul = document.querySelector('#user-tasks')
+        ul.append(li)
+    })
+
+    const tasks = document.querySelectorAll('li>a');
+
 
     tasks.forEach(task => {
         const id = task.getAttribute('id')
         fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`)
-        .then(res => res.json())
-        .then(crossCheckDates)
-        
-        function crossCheckDates(dates){
+            .then(res => res.json())
+            .then(crossCheckDates)
+
+        function crossCheckDates(dates) {
             let li = document.querySelector(`#li_${id}`)
             let date = new Date();
             const month = date.toLocaleString('default', { month: '2-digit' });
             const todaysDate = `${date.getDate()}_${month}_22`
             const todaysDay = date.getDate()
-            if(dates.err === 'Completion dates not found for this habit'){
+            if (dates.err === 'Completion dates not found for this habit') {
                 console.log('no date')
-            } else{
-                
-                console.log(date.getDate())
-                dates.forEach( date => {
-                    console.log(date.date)
-                    if(date.date === todaysDate || li.getAttribute('class') === 'Monthly' ){
+            } else {
+                dates.forEach(date => {
+                    if (date.date === todaysDate || li.getAttribute('class') === 'Monthly') {
                         task.setAttribute('class', 'habit_completed')
-                    } else if(parseInt(date.date.split('_')[1]) - todaysDay < 6 ){
+                    } else if (parseInt(date.date.split('_')[1]) - todaysDay < 6) {
                         task.setAttribute('class', 'habit_completed')
                     }
                 })
-                
+
             }
-        
+
         }
     })
-
-    
 }
 
 // TASK POSTING
@@ -228,7 +234,7 @@ function renderCheckList() {
     let divs =[];
     const tasks = document.querySelectorAll('li>a');
 
-    tasks.forEach(async (task) => {
+    tasks.forEach(task => {
         const id = task.getAttribute('id')
         fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`)
         .then(res => res.json())
@@ -278,14 +284,18 @@ function renderCheckList() {
             }
         }
     })
+    listComplete();
+    checklistButton.setAttribute('hidden', 'hidden')
+    hideChecklistButton.removeAttribute('hidden')
+}
+
+function listComplete() {
     if(document.querySelectorAll('.habit').length === 0) {
         const p = document.createElement('p')
         p.textContent = `All done for today!` 
         const checklistDiv = document.querySelector('.taskForm')
         checklistDiv.append(p)
     }
-    checklistButton.setAttribute('hidden', 'hidden')
-    hideChecklistButton.removeAttribute('hidden')
 }
 
 function removeChecklist(){
@@ -319,14 +329,12 @@ function postChecklist() {
                 date: todaysDate
             
             }
-            console.log(entryData)
             const options = {
                 method : "POST",
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify(entryData)
             }
             fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates`, options)
-            .then(reloadPage)
         } catch (err) {
             console.warn(err);
         }
@@ -335,10 +343,10 @@ function postChecklist() {
         const task = document.getElementById(`${yesButton.getAttribute('id').split('_')[1]}`)
         task.setAttribute('class', 'habit_completed')
     })
-   
+    listComplete(); 
 }
 
-function clearedList() {}
+
 
 // getting calender modals to pop up
 
@@ -354,7 +362,6 @@ async function renderCalendar(e){
     } catch (err) {
         console.warn(err);
     }
-    console.log(e.srcElement.textContent)
     const frequency = e.srcElement.parentElement.getAttribute('class')
     const calenderHeader = document.querySelector('#calender-header')
     calenderHeader.textContent = `${frequency} Habit: ${e.srcElement.textContent}`
@@ -369,7 +376,6 @@ function updateCalendar(data){
     })
 
     if(data.err === 'Completion dates not found for this habit'){
-        console.log('do nothing')
     } else {
         const dates = document.querySelectorAll('td')
         data.forEach(element => {
