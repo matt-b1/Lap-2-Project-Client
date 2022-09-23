@@ -33,7 +33,6 @@ async function checkUsernameExists(e) {
                 }
             })
         });
-        console.log(dupe);
         if (dupe) {
             document.querySelector('#name1').placeholder = 'Username already in use...'
             resetRegistration();
@@ -55,13 +54,13 @@ async function registerAccount(e) {
 
     let date = new Date();
     const month = date.toLocaleString('default', { month: '2-digit' });
-    const todaysDate = `${date.getDate()}_${month}_22`
+    const yesterdaysDate = `${date.getDate()-1}_${month}_22`
 
     if (e.target.password.value === e.target.confirmpassword.value) { 
         const options = {
             method : "POST",
             headers: { "Content-Type": "application/json"},
-            body: JSON.stringify({ name: e.target.name1.value, password: e.target.password1.value, last_update: todaysDate })
+            body: JSON.stringify({ name: e.target.name1.value, password: e.target.password1.value, last_update: yesterdaysDate })
         }
         await fetch("https://lap2-project-achieved.herokuapp.com/users", options);
         alert(`Account ${e.target.name.value} successfully registered.`)
