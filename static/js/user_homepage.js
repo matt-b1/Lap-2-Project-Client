@@ -25,11 +25,11 @@ async function getAllHabits(){
         })
     } catch (err) {
         console.warn(err);
+        document.querySelector('#streakCounter').textContent = `Current Streak: ${localStorage.getItem('streak')} days`
     }
 }
 
 function appendStreak(habitList) {
-    console.log(habitList)
     if (!!habitList.length) {
 
         let allTasksCompleted = true
