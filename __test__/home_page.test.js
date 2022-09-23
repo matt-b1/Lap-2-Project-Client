@@ -4,7 +4,7 @@
 
  const fs = require("fs");
  const path = require("path");
- const html = fs.readFileSync(path.resolve(__dirname, "../home_page.html"), "utf-8") 
+ const html = fs.readFileSync(path.resolve(__dirname, "../static/html/home_page.html"), "utf-8") 
  
  describe("home page", () => {
      beforeEach(() => {

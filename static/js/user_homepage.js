@@ -15,10 +15,10 @@ logOut.addEventListener('click', () => {
 async function getAllHabits(){
     try {
         const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
+        console.log(localStorage.getItem('token'))
         await fetch(`https://lap2-project-achieved.herokuapp.com/habits/user/${localStorage.getItem('user_id')}`, options)
         .then(res => res.json())
-        .then(renderAllHabits)
-        
+        .then(renderAllHabits) 
     } catch (err) {
         console.warn(err);
     }
@@ -199,7 +199,7 @@ function postChecklist() {
         try {
             const entryData = {
                 habit_id: parseInt(yesButton.getAttribute('id').split('_')[1]),
-                date: '19_09_22'
+                date: todaysDate
             
             }
             console.log(entryData)

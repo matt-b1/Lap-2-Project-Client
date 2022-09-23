@@ -4,8 +4,8 @@
 
  const fs = require("fs");
  const path = require("path");
-const { hasUncaughtExceptionCaptureCallback } = require("process");
- const html = fs.readFileSync(path.resolve(__dirname, "../user_home_page.html"), "utf-8") 
+
+ const html = fs.readFileSync(path.resolve(__dirname, "../static/html/user_home_page.html"), "utf-8") 
  
  describe("home page", () => {
      beforeEach(() => {
