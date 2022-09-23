@@ -19,10 +19,37 @@ describe('user_home_page.html', () =>{
         expect(todaysDate.textContent).toContain(`${date.getDate()} ${month} 2022`)
     })
 
-    it('check get checklist button renders list of items to do', () => {
+    xit('check get checklist button renders list of items to do', () => {
         const getChecklist = document.querySelector('#checklistButton')
         const taskForm = document.querySelector('.taskForm')
         getChecklist.dispatchEvent(new dom.window.Event('click'))
         expect(taskForm.hasChildNodes()).toBe(true)
+    })
+
+    xit('check close checklist button closes list of items', async () => {
+        const getChecklist = document.querySelector('#checklistButton')
+        const closeChecklist = document.querySelector('#hideChecklist')
+        const taskForm = document.querySelector('.taskForm')
+        getChecklist.dispatchEvent(new dom.window.Event('click'))
+        closeChecklist.dispatchEvent(new dom.window.Event('click'))
+        expect(taskForm.hasChildNodes()).toBe(false)
+
+    })
+
+    it('filter function works to get all completed tasks for today', () => {
+        const select = document.querySelector('#filterSelect')
+        select.value = 'Complete'
+        const habits = document.querySelectorAll('li > a')
+        
+        habits.forEach(habit => {
+            let count = 0;
+            if(habit.getAttribute('class') === 'habit_completed'){
+                count+=1
+            }
+            
+        })
+        
+        expect(habits.length).toEqual(count)
+
     })
 })
