@@ -277,14 +277,18 @@ function renderCheckList() {
             }
         }
     })
+    listComplete();
+    checklistButton.setAttribute('hidden', 'hidden')
+    hideChecklistButton.removeAttribute('hidden')
+}
+
+function listComplete() {
     if(document.querySelectorAll('.habit').length === 0) {
         const p = document.createElement('p')
         p.textContent = `All done for today!` 
         const checklistDiv = document.querySelector('.taskForm')
         checklistDiv.append(p)
     }
-    checklistButton.setAttribute('hidden', 'hidden')
-    hideChecklistButton.removeAttribute('hidden')
 }
 
 function removeChecklist(){
@@ -318,7 +322,6 @@ function postChecklist() {
                 date: todaysDate
             
             }
-            console.log(entryData)
             const options = {
                 method : "POST",
                 headers: { "Content-Type": "application/json"},
@@ -333,7 +336,7 @@ function postChecklist() {
         const task = document.getElementById(`${yesButton.getAttribute('id').split('_')[1]}`)
         task.setAttribute('class', 'habit_completed')
     })
-   
+    listComplete(); 
 }
 
 
