@@ -1,5 +1,3 @@
-//const { default: jwtDecode } = require("jwt-decode");
-
 const registerForm = document.querySelector("#registerForm");
 const loginForm = document.querySelector("#loginForm");
 const closeButton1 = document.querySelector('#close1');
@@ -74,36 +72,6 @@ async function registerAccount(e) {
     }
     resetRegistration();
 }
-
-/*async function accountLogin(e) {
-    e.preventDefault();
-    const options = {
-        method : "POST",
-        header: { "Content-Type": "application/json"},
-        body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
-    }
-    await fetch("https://lap2-project-achieved.herokuapp.com/users/login", options)
-    .then(res => res.json())
-    .then(data => {
-        /*let user = data.filter(user => e.target.name.value === user.name);
-        if (!user.length) {
-            alert('Login failed.');
-            resetLogin();
-        }
-        for (const userDetails of user) {
-            console.log(userDetails);
-            if (e.target.password.value === userDetails.password) {
-                login(userDetails);
-                window.location.href = 'user_home_page.html';
-                resetLogin();
-            }
-            else {
-                alert('Login failed');
-                resetLogin();
-            }
-        }
-    })
-}*/
 
 async function requestLogin(e){
     e.preventDefault();

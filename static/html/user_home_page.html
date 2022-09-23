@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../../static/css/user_home_page.css">
     <script defer src="../js/user_homepage.js"></script>
     <link rel="shortcut icon" type="images/png" href="../images/favicon.ico">
+    <script src='https://cdn.jsdelivr.net/npm/jwt-decode@1.5.1/build/jwt-decode.min.js'></script>
     <title>User Home Page</title>
 </head>
 <body>
@@ -34,7 +35,7 @@
                 <h2>Welcome, <span id="user"></span></h2>
                 <h3>What will you achieve today?</h3>
             </div>
-            <p id="streakCounter">Current Streak: 0 days</p> 
+            <p id="streakCounter"></p> 
         </div>
         <div id="checklistButton-div">
 

@@ -17,11 +17,128 @@ async function getAllHabits(){
         const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
         await fetch(`https://lap2-project-achieved.herokuapp.com/habits/user/${localStorage.getItem('user_id')}`, options)
         .then(res => res.json())
-        .then(renderAllHabits)
+        .then(res => {
+            renderAllHabits(res)
+            appendStreak(res)
+        })
         
     } catch (err) {
         console.warn(err);
     }
+}
+
+function appendStreak(habitList) {
+    console.log(habitList)
+    if (!!habitList.length) {
+
+        let allTasksCompleted = true
+        const tasks = document.querySelectorAll('li>a');
+        tasks.forEach(task => {
+	        if (task.getAttribute('class') === 'habit'){
+		        allTasksCompleted = false
+	        }
+        })
+
+        let date = new Date();
+        const month = date.toLocaleString('default', { month: '2-digit' });
+        const todaysDate = `${date.getDate()}_${month}_22`
+        const daysFromLastUpdate = date.getDate() - parseInt(localStorage.getItem('last_update').split('_')[0])
+
+        if (!!allTasksCompleted){
+            if (daysFromLastUpdate !== 0) {
+                //update streak count
+
+                let changes = {
+                    column_to_change: "streak", 
+                    value: parseInt(localStorage.getItem('streak')) + daysFromLastUpdate,
+                    user_id: parseInt(localStorage.getItem('user_id'))
+                }
+
+                let options = {
+                    method: 'PATCH',
+                    body: JSON.stringify(changes),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                };
+
+                fetch('https://lap2-project-achieved.herokuapp.com/users', options)
+                    .then(res => res.json())
+
+                //update last_update
+
+                changes = {
+                    column_to_change: "last_update", 
+                    value: todaysDate,
+                    user_id: parseInt(localStorage.getItem('user_id'))
+                }
+
+                options = {
+                    method: 'PATCH',
+                    body: JSON.stringify(changes),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                };
+
+                fetch('https://lap2-project-achieved.herokuapp.com/users', options)
+                    .then(res => res.json())
+                    .then(data => updateLocalStorage(data.token))
+            }
+        } else {
+            if (daysFromLastUpdate > 1) {
+                //update streak count
+
+                let changes = {
+                    column_to_change: "streak", 
+                    value: 0,
+                    user_id: parseInt(localStorage.getItem('user_id'))
+                }
+
+                let options = {
+                    method: 'PATCH',
+                    body: JSON.stringify(changes),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                };
+
+                fetch('https://lap2-project-achieved.herokuapp.com/users', options)
+                    .then(res => res.json())
+
+                //update last_update
+
+                changes = {
+                    column_to_change: "last_update", 
+                    value: todaysDate,
+                    user_id: parseInt(localStorage.getItem('user_id'))
+                }
+
+                options = {
+                    method: 'PATCH',
+                    body: JSON.stringify(changes),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                };
+
+                fetch('https://lap2-project-achieved.herokuapp.com/users', options)
+                    .then(res => res.json())
+                    .then(data => updateLocalStorage(data.token))
+            }
+        }
+    }
+    // update counter in html
+    document.querySelector('#streakCounter').textContent = `Current Streak: ${localStorage.getItem('streak')} days`
+}
+
+function updateLocalStorage(token) {
+    const decodedToken = jwt_decode(token);
+    localStorage.setItem('token', token);
+    localStorage.setItem('username', decodedToken.username);
+    localStorage.setItem('user_id', decodedToken.user_id);
+    localStorage.setItem('streak', decodedToken.streak);
+    localStorage.setItem('last_update', decodedToken.last_update);
 }
 
 function getDate() {
@@ -36,7 +153,6 @@ function renderUser() {
 
 function renderAllHabits(data){
         let lis = [];
-        console.log(data);
         data.forEach(element => {
             console.log('loading to do list...')
             const li = document.createElement('li')
@@ -70,8 +186,7 @@ function renderAllHabits(data){
 
     tasks.forEach(task => {
         const id = task.getAttribute('id')
-        const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
-        fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`,options)
+        fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`)
         .then(res => res.json())
         .then(crossCheckDates)
         
@@ -114,8 +229,7 @@ function renderCheckList() {
 
     tasks.forEach(task => {
         const id = task.getAttribute('id')
-        const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
-        fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`,options)
+        fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`)
         .then(res => res.json())
         .then(renderHabitChecklist)
         
@@ -196,7 +310,7 @@ function postChecklist() {
         try {
             const entryData = {
                 habit_id: parseInt(yesButton.getAttribute('id').split('_')[1]),
-                date: '19_09_22'
+                date: todaysDate
             
             }
             console.log(entryData)
@@ -227,8 +341,7 @@ async function renderCalendar(e){
     try {
         const id = e.srcElement.getAttribute('id')
         console.log(e.srcElement.getAttribute('id'))
-        const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
-        await fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`,options)
+        await fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`)
         .then(res => res.json())
         .then(updateCalendar)
     } catch (err) {
