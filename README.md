@@ -1,5 +1,7 @@
 # Achieved (Client)
 
+*The achieve API repo can be found here -> [Achieve API](https://github.com/Babole/api-achieved)*
+
 ## Project Aims
 
 The project was to develop a habit tracker app that provided the following functionalities:
