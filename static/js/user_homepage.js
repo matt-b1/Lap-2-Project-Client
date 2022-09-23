@@ -229,12 +229,7 @@ function renderCheckList() {
 
     tasks.forEach(task => {
         const id = task.getAttribute('id')
-<<<<<<< HEAD
-        const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
-        fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`,options)
-=======
         fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`)
->>>>>>> 3bdca1af198585118932ee858805f03f78953a3c
         .then(res => res.json())
         .then(renderHabitChecklist)
         
