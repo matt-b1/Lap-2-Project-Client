@@ -192,6 +192,11 @@ async function getAllHabits(){
 
 ## Testing
 
+### Coverage
+
+![image](https://user-images.githubusercontent.com/86776447/191947029-06e69656-ea24-4452-b265-5ea1eab0df1c.png)
+
+
 ## Future Features
 
 - Ability to suitably measure or track habit progress (eg. progress bar, percentage).
