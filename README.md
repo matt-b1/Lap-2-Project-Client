@@ -25,7 +25,7 @@ The project was to develop a habit tracker app that provided the following funct
 
 ### *Site*
 
-The site is deployed on [netlify](https://brilliant-monstera-150a9f.netlify.app/static/html/home_page).
+The site is deployed on [netlify](https://achieved-habit-tracker.netlify.app/static/html/home_page.html).
 
 ### *Server*
 
