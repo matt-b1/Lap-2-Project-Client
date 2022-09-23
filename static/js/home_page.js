@@ -1,5 +1,3 @@
-//const { default: jwtDecode } = require("jwt-decode");
-
 const registerForm = document.querySelector("#registerForm");
 const loginForm = document.querySelector("#loginForm");
 const closeButton1 = document.querySelector('#close1');
@@ -54,11 +52,16 @@ async function checkUsernameExists(e) {
 
 async function registerAccount(e) {
     e.preventDefault();
+
+    let date = new Date();
+    const month = date.toLocaleString('default', { month: '2-digit' });
+    const todaysDate = `${date.getDate()}_${month}_22`
+
     if (e.target.password.value === e.target.confirmpassword.value) { 
         const options = {
             method : "POST",
             headers: { "Content-Type": "application/json"},
-            body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
+            body: JSON.stringify({ name: e.target.name1.value, password: e.target.password1.value, last_update: todaysDate })
         }
         await fetch("https://lap2-project-achieved.herokuapp.com/users", options);
         alert(`Account ${e.target.name.value} successfully registered.`)
@@ -69,36 +72,6 @@ async function registerAccount(e) {
     }
     resetRegistration();
 }
-
-/*async function accountLogin(e) {
-    e.preventDefault();
-    const options = {
-        method : "POST",
-        header: { "Content-Type": "application/json"},
-        body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
-    }
-    await fetch("https://lap2-project-achieved.herokuapp.com/users/login", options)
-    .then(res => res.json())
-    .then(data => {
-        /*let user = data.filter(user => e.target.name.value === user.name);
-        if (!user.length) {
-            alert('Login failed.');
-            resetLogin();
-        }
-        for (const userDetails of user) {
-            console.log(userDetails);
-            if (e.target.password.value === userDetails.password) {
-                login(userDetails);
-                window.location.href = 'user_home_page.html';
-                resetLogin();
-            }
-            else {
-                alert('Login failed');
-                resetLogin();
-            }
-        }
-    })
-}*/
 
 async function requestLogin(e){
     e.preventDefault();
@@ -135,6 +108,8 @@ function login(token) {
     localStorage.setItem('token', token);
     localStorage.setItem('username', decodedToken.username);
     localStorage.setItem('user_id', decodedToken.user_id);
+    localStorage.setItem('streak', decodedToken.streak);
+    localStorage.setItem('last_update', decodedToken.last_update);
     window.location.href = 'user_home_page.html';
     resetLogin();
 }

@@ -7,6 +7,7 @@ const habitButtton = document.querySelector('#addHabit');
 filterHabit;
 getDate();
 renderUser();
+clearedList();
 
 logOut.addEventListener('click', () => {
     localStorage.clear();
@@ -15,13 +16,130 @@ logOut.addEventListener('click', () => {
 async function getAllHabits(){
     try {
         const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
-        console.log(localStorage.getItem('token'))
+        console.log(localStorage.getItem('token'));
         await fetch(`https://lap2-project-achieved.herokuapp.com/habits/user/${localStorage.getItem('user_id')}`, options)
         .then(res => res.json())
-        .then(renderAllHabits) 
+        .then(res => {
+            renderAllHabits(res)
+            appendStreak(res)
+        })
     } catch (err) {
         console.warn(err);
+        document.querySelector('#streakCounter').textContent = `Current Streak: ${localStorage.getItem('streak')} days`
     }
+}
+
+function appendStreak(habitList) {
+    if (!!habitList.length) {
+
+        let allTasksCompleted = true
+        const tasks = document.querySelectorAll('li>a');
+        tasks.forEach(task => {
+	        if (task.getAttribute('class') === 'habit'){
+		        allTasksCompleted = false
+	        }
+        })
+
+        let date = new Date();
+        const month = date.toLocaleString('default', { month: '2-digit' });
+        const todaysDate = `${date.getDate()}_${month}_22`
+        const daysFromLastUpdate = date.getDate() - parseInt(localStorage.getItem('last_update').split('_')[0])
+
+        if (!!allTasksCompleted){
+            if (daysFromLastUpdate !== 0) {
+                //update streak count
+
+                let changes = {
+                    column_to_change: "streak", 
+                    value: parseInt(localStorage.getItem('streak')) + daysFromLastUpdate,
+                    user_id: parseInt(localStorage.getItem('user_id'))
+                }
+
+                let options = {
+                    method: 'PATCH',
+                    body: JSON.stringify(changes),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                };
+
+                fetch('https://lap2-project-achieved.herokuapp.com/users', options)
+                    .then(res => res.json())
+
+                //update last_update
+
+                changes = {
+                    column_to_change: "last_update", 
+                    value: todaysDate,
+                    user_id: parseInt(localStorage.getItem('user_id'))
+                }
+
+                options = {
+                    method: 'PATCH',
+                    body: JSON.stringify(changes),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                };
+
+                fetch('https://lap2-project-achieved.herokuapp.com/users', options)
+                    .then(res => res.json())
+                    .then(data => updateLocalStorage(data.token))
+            }
+        } else {
+            if (daysFromLastUpdate > 1) {
+                //update streak count
+
+                let changes = {
+                    column_to_change: "streak", 
+                    value: 0,
+                    user_id: parseInt(localStorage.getItem('user_id'))
+                }
+
+                let options = {
+                    method: 'PATCH',
+                    body: JSON.stringify(changes),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                };
+
+                fetch('https://lap2-project-achieved.herokuapp.com/users', options)
+                    .then(res => res.json())
+
+                //update last_update
+
+                changes = {
+                    column_to_change: "last_update", 
+                    value: todaysDate,
+                    user_id: parseInt(localStorage.getItem('user_id'))
+                }
+
+                options = {
+                    method: 'PATCH',
+                    body: JSON.stringify(changes),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                };
+
+                fetch('https://lap2-project-achieved.herokuapp.com/users', options)
+                    .then(res => res.json())
+                    .then(data => updateLocalStorage(data.token))
+            }
+        }
+    }
+    // update counter in html
+    document.querySelector('#streakCounter').textContent = `Current Streak: ${localStorage.getItem('streak')} days`
+}
+
+function updateLocalStorage(token) {
+    const decodedToken = jwt_decode(token);
+    localStorage.setItem('token', token);
+    localStorage.setItem('username', decodedToken.username);
+    localStorage.setItem('user_id', decodedToken.user_id);
+    localStorage.setItem('streak', decodedToken.streak);
+    localStorage.setItem('last_update', decodedToken.last_update);
 }
 
 function getDate() {
@@ -35,20 +153,15 @@ function renderUser() {
 }
 
 function renderAllHabits(data){
-    
-
-
-    
         let lis = [];
-        console.log(data);
         data.forEach(element => {
             console.log('loading to do list...')
             const li = document.createElement('li')
             const a = document.createElement('a')
+            const iconDiv = document.createElement('div')
             const img = document.createElement('img')
             a.textContent = element.description
             a.setAttribute('href', '#calender-div')
-            
             a.setAttribute('class', 'habit')
             a.setAttribute('id', element.id)
             a.addEventListener('click', renderCalendar)
@@ -58,9 +171,10 @@ function renderAllHabits(data){
             img.setAttribute('src', '../images/delete.png')
             img.setAttribute('id', 'delete')
             img.addEventListener('click', deleteHabit.bind(this, a.getAttribute('id'), element.description))
-            
+            iconDiv.setAttribute('id', 'iconDiv')
+            iconDiv.append(img);
             li.append(a)
-            li.append(img)
+            li.append(iconDiv)
             lis.push(li)
         });
     
@@ -73,8 +187,7 @@ function renderAllHabits(data){
 
     tasks.forEach(task => {
         const id = task.getAttribute('id')
-        const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
-        fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`,options)
+        fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`)
         .then(res => res.json())
         .then(crossCheckDates)
         
@@ -92,13 +205,14 @@ function renderAllHabits(data){
                 dates.forEach( date => {
                     console.log(date.date)
                     if(date.date === todaysDate || li.getAttribute('class') === 'Monthly' ){
-                        task.setAttribute('class', 'habit_Completed')
+                        task.setAttribute('class', 'habit_completed')
                     } else if(parseInt(date.date.split('_')[1]) - todaysDay < 6 ){
-                        task.setAttribute('class', 'habit_Completed')
+                        task.setAttribute('class', 'habit_completed')
                     }
                 })
                 
             }
+        
         }
     })
 
@@ -115,10 +229,9 @@ function renderCheckList() {
     let divs =[];
     const tasks = document.querySelectorAll('li>a');
 
-    tasks.forEach(task => {
+    tasks.forEach(async (task) => {
         const id = task.getAttribute('id')
-        const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
-        fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`,options)
+        fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`)
         .then(res => res.json())
         .then(renderHabitChecklist)
         
@@ -163,11 +276,15 @@ function renderCheckList() {
                     console.log('completing tasks...')
                     task.setAttribute('class', 'habit_completed')
                 }
-            
-
             }
         }
     })
+    if(document.querySelectorAll('.habit').length === 0) {
+        const p = document.createElement('p')
+        p.textContent = `All done for today!` 
+        const checklistDiv = document.querySelector('.taskForm')
+        checklistDiv.append(p)
+    }
     checklistButton.setAttribute('hidden', 'hidden')
     hideChecklistButton.removeAttribute('hidden')
 }
@@ -177,7 +294,8 @@ function removeChecklist(){
     divs.forEach(div => {
         div.remove();
     })
-
+    const checklistDiv = document.querySelector('.taskForm')
+    checklistDiv.innerHTML = '';
     hideChecklistButton.setAttribute('hidden', 'hidden')
     checklistButton.removeAttribute('hidden')
     const submitChecklist = document.querySelector('#checklistSubmit')
@@ -220,7 +338,8 @@ function postChecklist() {
     })
    
 }
-    
+
+function clearedList() {}
 
 // getting calender modals to pop up
 
@@ -230,8 +349,7 @@ async function renderCalendar(e){
     try {
         const id = e.srcElement.getAttribute('id')
         console.log(e.srcElement.getAttribute('id'))
-        const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
-        await fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`,options)
+        await fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`)
         .then(res => res.json())
         .then(updateCalendar)
     } catch (err) {
@@ -324,7 +442,7 @@ function filterHabit(filter) {
     if (filter === 'complete') {
         for (let i = 0; i < habits.length; i++) {
             console.log(habits);
-            if ((habits[i]).getAttribute('class') === 'habit_Completed') {
+            if ((habits[i]).getAttribute('class') === 'habit_completed') {
                 listdiv[i].style.display = '';
             } else {
                 listdiv[i].style.display = 'none';
@@ -332,7 +450,7 @@ function filterHabit(filter) {
         }
     } else if (filter === 'incomplete') {
         for (let i = 0; i < habits.length; i++) {
-            if ((habits[i]).getAttribute('class') !== 'habit_Completed') {
+            if ((habits[i]).getAttribute('class') !== 'habit_completed') {
                 listdiv[i].style.display = '';
             } else {
                 listdiv[i].style.display = 'none';
@@ -387,6 +505,14 @@ function renderNewHabit(filtered){
 async function getHabitData(habit) {
     try {
         let filtered;
+        /*const options = {
+            method: "GET",
+            headers: {
+            authorization:
+                    `${localStorage.getItem('token')}`,
+                
+            }
+        }*/
         const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
         await fetch(`https://lap2-project-achieved.herokuapp.com/habits/user/${localStorage.getItem('user_id')}`, options)
         .then(res => res.json())
@@ -433,9 +559,7 @@ async function deleteHabit(habit_id, description) {
     }
     if (confirm(`Delete entry "${description}"?`)) {
         fetch(`https://lap2-project-achieved.herokuapp.com/habits/${habit_id}`, options)
-        .then(data => {
-            location.reload();
-        })
+        .then(reloadPage)
     } else {
         return;
     }
