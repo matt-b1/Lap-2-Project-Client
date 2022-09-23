@@ -362,8 +362,9 @@ async function renderCalendar(e){
     } catch (err) {
         console.warn(err);
     }
+    const frequency = e.srcElement.parentElement.getAttribute('class')
     const calenderHeader = document.querySelector('#calender-header')
-    calenderHeader.textContent = `Habit: ${e.srcElement.textContent}`
+    calenderHeader.textContent = `${frequency} Habit: ${e.srcElement.textContent}`
 }
 
 function updateCalendar(data){
