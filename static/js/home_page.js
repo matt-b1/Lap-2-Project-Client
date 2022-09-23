@@ -67,6 +67,14 @@ async function registerAccount(e) {
         alert(`Account ${e.target.name.value} successfully registered.`)
         resetRegistration();
         document.getElementById('close1').click();
+        const r = await fetch(`https://lap2-project-achieved.herokuapp.com/users/login`, options)
+        const data = await r.json()
+        if (!data.success) { 
+            resetLogin();
+            alert('Registration failed. Please try again');
+            throw new Error('Failed to receive account details');
+        }
+        login(data.token);
     } else {
         alert('Passwords do not match');
     }
