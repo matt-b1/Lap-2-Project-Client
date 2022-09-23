@@ -1,4 +1,4 @@
-# Achieved
+# Achieved (Client)
 
 ## Project Aims
 
@@ -126,7 +126,69 @@ router.post('/login', usersController.showByUsername)
 
 ## Code Snippets
 
+### Token Verification middleware - JS
+```
+function verifyToken(req, res, next){
+    const header = req.headers['authorization'];
+    if (header) {
+        const token = header.split(' ')[1];
+        jwt.verify(token, process.env.SECRET, async (err, data) => {
+            console.log(data);
+            if(err){
+                res.status(403).json({ err: 'Invalid token' })
+            } else {
+                next();
+            }
+        })
+    } else {
+        res.status(403).json({ err: 'Missing token' })
+    }
+}
+```
 
+### Log In method - JS
+```
+async function requestLogin(e){
+    e.preventDefault();
+    try {
+        const options = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
+        }
+        const r = await fetch(`https://lap2-project-achieved.herokuapp.com/users/login`, options)
+        const data = await r.json()
+        console.log(data);
+        if (!data.success) { 
+            resetLogin();
+            alert('Login failed. Please try again');
+            throw new Error('Login not authorised');
+        }
+        login(data.token);
+    } catch (err) {
+        console.warn(err);
+    }
+}
+```
+
+### Fetch habits - JS
+```
+async function getAllHabits(){
+    try {
+        const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
+        console.log(localStorage.getItem('token'));
+        await fetch(`https://lap2-project-achieved.herokuapp.com/habits/user/${localStorage.getItem('user_id')}`, options)
+        .then(res => res.json())
+        .then(res => {
+            renderAllHabits(res)
+            appendStreak(res)
+        })
+    } catch (err) {
+        console.warn(err);
+        document.querySelector('#streakCounter').textContent = `Current Streak: ${localStorage.getItem('streak')} days`
+    }
+}
+```
 
 ## Testing
 
