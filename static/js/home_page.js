@@ -14,7 +14,6 @@ loginForm.addEventListener("submit", (e) => {
 
 closeButton1.addEventListener("click", (e) => {
     resetRegistration();
-    document.querySelector('#name1').placeholder = 'Username...'
 })
 
 closeButton2.addEventListener("click", (e) => {
