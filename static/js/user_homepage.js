@@ -213,7 +213,7 @@ function renderAllHabits(data) {
                 dates.forEach(date => {
                     if (date.date === todaysDate || li.getAttribute('class') === 'Monthly') {
                         task.setAttribute('class', 'habit_completed')
-                    } else if (parseInt(date.date.split('_')[1]) - todaysDay < 6) {
+                    } else if (parseInt(date.date.split('_')[1]) - todaysDay < 6 && li.getAttribute('class') === 'Weekly') {
                         task.setAttribute('class', 'habit_completed')
                     }
                 })
