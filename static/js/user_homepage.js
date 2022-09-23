@@ -1,13 +1,11 @@
 // when page load, fetch all the habits
 addEventListener('load', getAllHabits())
 
-
 const logOut = document.querySelector('#logout');
 const habitButtton = document.querySelector('#addHabit');
 filterHabit;
 getDate();
 renderUser();
-clearedList();
 
 logOut.addEventListener('click', () => {
     localStorage.clear();
@@ -114,10 +112,10 @@ function renderCheckList() {
     let divs =[];
     const tasks = document.querySelectorAll('li>a');
 
-    tasks.forEach(async (task) => {
+    tasks.forEach(task => {
         const id = task.getAttribute('id')
         const options = { headers: new Headers({'Authorization': localStorage.getItem('token')}) }
-        await fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`,options)
+        fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates/${id}`,options)
         .then(res => res.json())
         .then(renderHabitChecklist)
         
@@ -213,7 +211,6 @@ function postChecklist() {
                 body: JSON.stringify(entryData)
             }
             fetch(`https://lap2-project-achieved.herokuapp.com/completion_dates`, options)
-            .then(reloadPage)
         } catch (err) {
             console.warn(err);
         }
@@ -225,7 +222,7 @@ function postChecklist() {
    
 }
 
-function clearedList() {}
+
 
 // getting calender modals to pop up
 
